@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enum\OtpTypeEnum;
 use App\Enum\UserRoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Mail\EmailVerification;
+use App\Mail\EmailVerificationOtp;
 use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Support\Carbon;
@@ -25,10 +26,10 @@ class AuthController extends Controller
         Otp::create([
             'user_id' => $user->id,
             'otp' => $otp,
-            'type' => 'email_verification',
+            'type' => OtpTypeEnum::verifyEmail,
             'expires_at' => Carbon::now()->addMinutes(10),
         ]);
-        Mail::to($user->email)->send(new EmailVerification($otp));
+        Mail::to($user->email)->send(new EmailVerificationOtp($otp));
         $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             'message' => 'User registered successfully',
