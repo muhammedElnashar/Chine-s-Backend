@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Enum\UserRoleEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\EmailVerification;
 use App\Models\Otp;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -37,8 +37,27 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function login()
+    public function login(LoginRequest $request)
     {
+        $user= User::where('email', $request->email)->first();
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Invalid Email Or Password , Please try again',
+            ], 401);
+        }
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json([
+            'message' => 'User logged in successfully',
+            'user' => $user,
+            'token' => $token
+        ]);
 
+    }
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        return response()->json([
+            'message' => 'User logged out successfully',
+        ]);
     }
 }

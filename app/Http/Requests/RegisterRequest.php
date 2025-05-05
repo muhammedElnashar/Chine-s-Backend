@@ -50,6 +50,7 @@ class RegisterRequest extends FormRequest
     public function failedValidation(Validator $validator): array
     {
         throw new HttpResponseException(response()->json([
+            'message'=> 'Register Failed',
             'Validation_errors' => $validator->errors(),
         ], 422));
     }
