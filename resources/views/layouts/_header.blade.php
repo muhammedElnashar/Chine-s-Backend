@@ -39,49 +39,51 @@
                     data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
                     <!--begin::Menu-->
 
-{{--
+
                     <div class="my-5 menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-lg-0 align-items-stretch"
                         id="#kt_header_menu" data-kt-menu="true">
                         <div class="menu-item me-lg-1">
-                            <a class="menu-link {{ request()->routeIs('dashboard') ? 'active' : '' }} py-3"
-                                href="{{ route('dashboard') }}">
+                            <a class="menu-link {{ request()->routeIs('home') ? 'active' : '' }} py-3"
+                                href="{{ route('home') }}">
                                 <span class="menu-title fs-6">Dashboard</span>
                             </a>
                         </div>
                         <div class="menu-item me-lg-1">
-                            <a class="menu-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') || Request::routeIs('category.edit') ? 'active' : '' }}  py-3"
-                                href="{{ route('category.create') }}">
-                                <span class="menu-title fs-6">Add Category</span>
+                            <a class="menu-link {{ Request::routeIs('articles.index') || Request::routeIs('articles.create') || Request::routeIs('articles.edit') ? 'active' : '' }}  py-3"
+                                href="{{ route('articles.create') }}">
+                                <span class="menu-title fs-6">Add Article</span>
                             </a>
                         </div>
-                        <div class="menu-item me-lg-1">
-                            <a class="menu-link {{ Request::routeIs('course.index') || Request::routeIs('course.create') || Request::routeIs('course.edit') ? 'active' : '' }}  py-3"
-                                href="{{ route('course.create') }}">
-                                <span class="menu-title fs-6">Add Course</span>
-                            </a>
-                        </div>
-                        <!-- Add this inside the header menu -->
-                        <div class="menu-item me-lg-1">
-                            <a class="menu-link {{ Request::routeIs('coupons.index') || Request::routeIs('coupons.create') || Request::routeIs('coupons.edit') ? 'active' : '' }} py-3"
-                                href="{{ route('coupons.create') }}">
-                                <span class="menu-title fs-6">Add Coupon</span>
-                            </a>
-                        </div>
-
-                        <div class="menu-item me-lg-1">
-
-                            <a class="py-3 menu-link" href="{{ route('youtube') }}">
-                                <span class="menu-title fs-6">Fetch New PLaylist</span>
-                            </a>
-                        </div>
-                        <div class="menu-item me-lg-1">
-
-                            <a class="py-3 menu-link" href="{{ route('fetchShorts') }}">
-                                <span class="menu-title fs-6">Fetch New Short Video</span>
-                            </a>
-                        </div>
-
                     </div>
+
+                    {{--
+                    <div class="menu-item me-lg-1">
+                        <a class="menu-link {{ Request::routeIs('course.index') || Request::routeIs('course.create') || Request::routeIs('course.edit') ? 'active' : '' }}  py-3"
+                            href="{{ route('course.create') }}">
+                            <span class="menu-title fs-6">Add Course</span>
+                        </a>
+                    </div>
+                    <!-- Add this inside the header menu -->
+                    <div class="menu-item me-lg-1">
+                        <a class="menu-link {{ Request::routeIs('coupons.index') || Request::routeIs('coupons.create') || Request::routeIs('coupons.edit') ? 'active' : '' }} py-3"
+                            href="{{ route('coupons.create') }}">
+                            <span class="menu-title fs-6">Add Coupon</span>
+                        </a>
+                    </div>
+
+                    <div class="menu-item me-lg-1">
+
+                        <a class="py-3 menu-link" href="{{ route('youtube') }}">
+                            <span class="menu-title fs-6">Fetch New PLaylist</span>
+                        </a>
+                    </div>
+                    <div class="menu-item me-lg-1">
+
+                        <a class="py-3 menu-link" href="{{ route('fetchShorts') }}">
+                            <span class="menu-title fs-6">Fetch New Short Video</span>
+                        </a>
+                    </div>
+
 --}}
 
                     <!--end::Menu-->
