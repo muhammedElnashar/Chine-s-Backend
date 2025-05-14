@@ -3,7 +3,6 @@
 @section('title')
 Add Daily Exercise
 @endsection
-
 @section('content')
     <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
         <div class="d-flex flex-column flex-column-fluid">
@@ -124,13 +123,11 @@ Add Daily Exercise
             updateQuestionNumbers();
         });
 
-        // حذف السؤال عند الضغط على زر الحذف
         $(document).on('click', '.remove-question-btn', function () {
             $(this).closest('.question-block').remove();
-            updateQuestionNumbers(); // تحديث الأرقام بعد الحذف
+            updateQuestionNumbers(); //
         });
 
-        // إعادة ترقيم الأسئلة
         function updateQuestionNumbers() {
             $('.question-block').each(function(index) {
                 $(this).find('.question-number').text(index + 1);

@@ -47,7 +47,9 @@
                                 <span class="indicator-label">Filter</span>
 
                             </button>
-                                                            <button type="button" class="btn btn-secondary ms-2" onclick="window.location.href='{{ route('questions.index') }}'">Clear Filter</button>
+                            <button type="button" class="btn btn-secondary ms-2"
+                                    onclick="window.location.href='{{ route('questions.index') }}'">Clear Filter
+                            </button>
 
                         </form>
 

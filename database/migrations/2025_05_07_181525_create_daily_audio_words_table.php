@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('daily_exercise_id')->constrained()->onDelete('cascade');
             $table->string('audio_file');
             $table->string('word_meaning');
+            $table->timestamps();
         });
     }
 

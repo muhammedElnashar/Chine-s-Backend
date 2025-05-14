@@ -50,7 +50,7 @@ class QuestionService
                 $end = ($key + 1) * 4;
                 $questionAnswers = array_slice($answersData, $start, 4);
 
-                foreach ($questionAnswers as &$answer) {
+                foreach ($questionAnswers as $answer) {
                     $answer['daily_text_question_id'] = $question->id;
                 }
 

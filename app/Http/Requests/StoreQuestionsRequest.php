@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\DailyExercise;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreQuestionsRequest extends FormRequest
@@ -14,7 +15,7 @@ class StoreQuestionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'exercise_date' => 'required|date|unique:daily_exercises,date',
+            'exercise_date' => 'required|date',
             'questions' => 'required|array|min:1',
             'questions.*.question_text' => 'required|string|max:255',
             'questions.*.answers' => 'required|array|size:4',
@@ -60,5 +61,17 @@ class StoreQuestionsRequest extends FormRequest
 
         return $messages;
     }
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $date = $this->input('exercise_date');
 
+            $exercise = DailyExercise::where('date', $date)->first();
+
+            if ($exercise && $exercise->questions()->exists()) {
+                $validator->errors()->add('exercise_date', 'Text Exercise already exists for this date.');
+            }
+
+        });
+    }
 }
