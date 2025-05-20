@@ -66,6 +66,12 @@
                                 <span class="menu-title fs-6">Add Daily Audio Exercise</span>
                             </a>
                         </div>
+                        <div class="menu-item me-lg-1">
+                            <a class="menu-link {{ Request::routeIs('courses.index') || Request::routeIs('courses.create') || Request::routeIs('courses.edit')  ? 'active' : '' }}  py-3"
+                                href="{{ route('courses.create') }}">
+                                <span class="menu-title fs-6">Add Course</span>
+                            </a>
+                        </div>
                     </div>
 
                     {{--

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('level_exams', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('level_id')->constrained();
+            $table->foreignId('level_id')->unique()->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description');
             $table->timestamps();

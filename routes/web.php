@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\DailyAudioWordController;
 use App\Http\Controllers\Admin\DailyQuestion;
 use App\Http\Controllers\Admin\LevelController;
+use App\Http\Controllers\Admin\LevelExamController;
 use App\Http\Controllers\Admin\VideoController;
 use App\Models\DailyAudioWord;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/s3/multipart-urls', [VideoController::class, 'getMultipartUploadUrls'])->name('s3.multipart-urls');
     Route::post('/s3/multipart-complete', [VideoController::class, 'completeMultipartUpload'])->name('s3.multipart-complete');
     Route::post('/s3/multipart-abort', [VideoController::class, 'abortMultipartUpload'])->name('s3.multipart-abort');
+
+
+
 });
