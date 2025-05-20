@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('level_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('video_url');
+            $table->integer('duration')->nullable();
             $table->timestamps();
         });
     }

@@ -57,7 +57,13 @@
                         <div class="menu-item me-lg-1">
                             <a class="menu-link {{ Request::routeIs('questions.index') || Request::routeIs('questions.create')  ? 'active' : '' }}  py-3"
                                 href="{{ route('questions.create') }}">
-                                <span class="menu-title fs-6">Add Daily Exercise</span>
+                                <span class="menu-title fs-6">Add Daily Text Exercise</span>
+                            </a>
+                        </div>
+                        <div class="menu-item me-lg-1">
+                            <a class="menu-link {{ Request::routeIs('words.index') || Request::routeIs('words.create')  ? 'active' : '' }}  py-3"
+                                href="{{ route('words.create') }}">
+                                <span class="menu-title fs-6">Add Daily Audio Exercise</span>
                             </a>
                         </div>
                     </div>

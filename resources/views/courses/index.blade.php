@@ -1,52 +1,50 @@
 @extends("layouts.app")
 
 @section('title')
-    Articles
+    Courses
 @endsection
-@push("css")
-@endpush
 
 @section('content')
     <div class="post d-flex flex-column-fluid" id="kt_post">
-        <!--begin::Container-->
         <div id="kt_content_container" class="container-xl">
-            <div class="card   mx-auto" style="border-radius: 25px" >
+            <div class="card mx-auto" style="border-radius: 25px">
                 <div class="card-header border-0 pt-6">
-                    <div class="card-title">
-
-                    </div>
+                    <div class="card-title"></div>
                     <div class="card-toolbar">
-                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <a href="{{ route('articles.create') }}" class="btn btn-primary" style="border-radius: 20px">Add Article</a>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('courses.create') }}" class="btn btn-primary" style="border-radius: 20px">Add Course</a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body pt-0">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_courses_table">
                         <thead>
-                        <tr class=" text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                            <th class="min-w-150px">Title</th>
-                            <th class="min-w-250px">Content</th>
-                            <th class="min-w-100px">Image</th>
-
-                            <th class="min-w-100px text-center" colspan="1">Actions</th>
+                        <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Image</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                         </thead>
-                        <tbody class="fw-bold  text-gray-600">
-
-
-                        @foreach($articles as $article)
-
+                        <tbody class="fw-bold text-gray-600">
+                        @foreach($courses as $course)
                             <tr>
-                                <td>{{ $article->title }}</td>
-                                <td>{{ \Illuminate\Support\Str::words($article->content, 5, '...') }}</td>
-                                <td> <img src="{{asset('storage/'. $article->image)}} " width="50px" height="50px"></td>
+                                <td>{{ $course->title }}</td>
+                                <td>{{ \Illuminate\Support\Str::words($course->description, 10, '...') }}</td>
+                                <td>{{ $course->type }}</td>
                                 <td>
+                                    @if($course->image)
+                                        <img src="{{ asset('storage/' . $course->image) }}" width="50" height="50" alt="Course Image">
+                                    @endif
+                                </td>
+                                <td class="text-center">
                                     <div class="d-flex justify-content-center flex-shrink-0">
-                                        <a href="{{route('articles.edit',$article)}}"
+                                        <a href="{{ route('courses.levels.index', $course) }}" class="btn  btn-bg-light btn-active-color-primary btn-sm ms-2">Manage Levels</a>
+                                        <a href="{{route('courses.edit', $course)}}"
                                            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2">
                                             <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
-                                            <span class="svg-icon svg-icon-3">
+                                            <span class="svg-icon svg-icon-2">
 																				<svg xmlns="http://www.w3.org/2000/svg"
                                                                                      width="24" height="24"
                                                                                      viewBox="0 0 24 24" fill="none">
@@ -59,11 +57,12 @@
 																				</svg>
 																			</span>
                                             <!--end::Svg Icon-->
+
                                         </a>
-                                        <form method="post" action="{{route("articles.destroy",$article)}}">
+                                        <form method="post" action="{{route('courses.destroy', $course)}}">
                                             @csrf
                                             @method("DELETE")
-                                            <button type="submit"  class="btn btn-icon btn-bg-light btn-active-color-primary deleted-btn btn-sm ms-2" >
+                                            <button type="submit"  class="btn btn-icon btn-bg-light btn-active-color-primary delete-btn btn-sm ms-2" >
                                                 <span class="svg-icon svg-icon-3">
 																				<svg xmlns="http://www.w3.org/2000/svg"
                                                                                      width="24" height="24"
@@ -83,50 +82,43 @@
                                         </form>
 
                                     </div>
+{{--                                    <a href="{{ route('courses.edit', $course) }}" class="btn btn-primary btn-sm me-1">Edit</a>--}}
+{{--                                    <form method="POST" action="{{ route('courses.destroy', $course) }}" style="display:inline-block;">--}}
+{{--                                        @csrf--}}
+{{--                                        @method('DELETE')--}}
+{{--                                        <button type="submit" class="btn btn-danger btn-sm delete-btn">Delete</button>--}}
+{{--                                    </form>--}}
                                 </td>
                             </tr>
                         @endforeach
-
                         </tbody>
                     </table>
-                    <div class="">
-
-                        {{$articles->links()}}
-
-                    </div>
-
+                    <div>{{ $courses->links() }}</div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Modal with Table -->
 @endsection
 
-@push("script")
+@push('script')
     <script>
-        $(document).ready(function  (){
-            $(`.deleted-btn`).click(function(e){
-                let form = $(this).parents('form');
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function(e){
                 e.preventDefault();
+                let form = this.closest('form');
                 Swal.fire({
-                    title: 'هل انت متأكد من حذف القسم؟',
-                    text: "لن تتمكن من التراجع عن هذا!",
+                    title: 'هل أنت متأكد من الحذف؟',
+                    text: "لا يمكنك التراجع عن هذا!",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    cancelButtonText: 'لا , تراجع',
-                    confirmButtonText: 'نعم , تأكيد الحذف'
-
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                    confirmButtonText: 'نعم، احذف',
+                    cancelButtonText: 'إلغاء',
+                }).then(result => {
+                    if(result.isConfirmed) {
                         form.submit();
                     }
                 });
             });
-
-        })
+        });
     </script>
-
 @endpush
