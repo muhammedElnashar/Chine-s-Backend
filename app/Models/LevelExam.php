@@ -16,5 +16,8 @@ class LevelExam extends Model
     {
         return $this->hasMany(LevelExamQuestion::class);
     }
-
+    public function attempts()
+    {
+        return $this->hasMany(LevelExamAttempt::class);
+    }
 }

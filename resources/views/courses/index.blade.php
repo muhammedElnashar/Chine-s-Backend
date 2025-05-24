@@ -23,6 +23,7 @@
                             <th>Title</th>
                             <th>Description</th>
                             <th>Type</th>
+                            <th>Price</th>
                             <th>Image</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -33,6 +34,7 @@
                                 <td>{{ $course->title }}</td>
                                 <td>{{ \Illuminate\Support\Str::words($course->description, 10, '...') }}</td>
                                 <td>{{ $course->type }}</td>
+                                <td>{{ $course->price }}</td>
                                 <td>
                                     @if($course->image)
                                         <img src="{{ asset('storage/' . $course->image) }}" width="50" height="50" alt="Course Image">

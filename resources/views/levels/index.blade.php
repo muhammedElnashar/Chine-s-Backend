@@ -30,6 +30,7 @@
                                     <td>{{ $level->position ?? '-' }}</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center flex-shrink-0">
+                                            <a href="{{ route('courses.levels.exams.index', [$course, $level]) }}" class="btn btn-bg-light btn-active-color-primary btn-sm ms-2">Exam</a>
                                             <a href="{{ route('courses.levels.videos.index', [$course, $level]) }}" class="btn btn-bg-light btn-active-color-primary btn-sm ms-2">Videos</a>
                                             <a href="{{ route('courses.levels.edit', [$course, $level]) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2">
                                             <span class="svg-icon svg-icon-2">

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DailyContent;
 use App\Http\Controllers\Api\EmailVerify;
+use App\Http\Controllers\Api\FreeContent;
 use App\Http\Controllers\Api\ResetPassword;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,5 +24,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // User
     Route::patch('update/user/profile', [UserController::class, 'updateUserProfile']);
     Route::delete('delete/user/profile', [UserController::class, 'deleteUserProfile']);
+    Route::get('articles', [FreeContent::class, 'getAllArticles']);
+    Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
+    Route::get('daily/questions', [DailyContent::class, 'getDailyTextExercise']);
+    Route::get('daily/words', [DailyContent::class, 'getDailyAudioExercise']);
 
 });

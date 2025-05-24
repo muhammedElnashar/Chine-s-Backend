@@ -13,12 +13,10 @@ use Illuminate\Support\Facades\Request;
 
 class DailyQuestion extends Controller
 {
-    protected $questionService;
 
-    public function __construct(QuestionService $questionService)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->questionService = $questionService;
 
     }
 
@@ -54,7 +52,6 @@ class DailyQuestion extends Controller
                     'daily_exercise_id' => $exercise->id,
                     'question_text' => $questionData['question_text'],
                     'created_at' => now(),
-                    'updated_at' => now(),
                 ];
             }
 
