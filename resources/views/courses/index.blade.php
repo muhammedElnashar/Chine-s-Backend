@@ -37,7 +37,7 @@
                                 <td>{{ $course->price }}</td>
                                 <td>
                                     @if($course->image)
-                                        <img src="{{ asset('storage/' . $course->image) }}" width="50" height="50" alt="Course Image">
+                                        <img src="{{ Storage::disk('s3')->url($course->image) }}" width="50" height="50" alt="Course Image">
                                     @endif
                                 </td>
                                 <td class="text-center">

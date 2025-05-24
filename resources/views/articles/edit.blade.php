@@ -71,7 +71,7 @@
                                                autocomplete="off"/>
                                     </div>
                                     <div class="input-group  mb-5">
-                                        <img src="{{asset('storage/'. $article->image)}} " width="50px" height="50px">
+                                        <img src="{{ Storage::disk('s3')->url($article->image) }} " width="50px" height="50px">
                                     </div>
 
 

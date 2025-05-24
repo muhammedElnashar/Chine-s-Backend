@@ -25,7 +25,7 @@ class CoursesController extends Controller
     {
         $data=$request->validated();
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('images/courses', 'public');
+            $data['image'] = $request->file('image')->storePublicly('images/courses', 's3');
         }
         Course::create($data);
         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
@@ -42,9 +42,9 @@ class CoursesController extends Controller
         $data = $request->validated();
         if ($request->hasFile('image')) {
             if ($course->image) {
-                Storage::disk('public')->delete($course->image);
+                Storage::disk('s3')->delete($course->image);
             }
-            $path = $request->file('image')->store('images/courses', 'public');
+            $path = $request->file('image')->storePublicly('images/courses', 's3');
             $data['image'] = $path;
         }
         $course->update($data);
@@ -53,7 +53,7 @@ class CoursesController extends Controller
     public function destroy(Course $course)
     {
         if ($course->image) {
-            Storage::disk('public')->delete($course->image);
+            Storage::disk('s3')->delete($course->image);
         }
         $course->delete();
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');

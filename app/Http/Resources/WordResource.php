@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class WordResource extends JsonResource
 {
@@ -17,7 +18,8 @@ class WordResource extends JsonResource
         return [
             'id' => $this->id,
             'meaning' => $this->word_meaning,
-            'audio' => asset('storage/' . $this->audio_file),
+            'audio' => $this->audio_file ? Storage::disk('s3')->url($this->audio_file) : null,
+
         ];
     }
 }

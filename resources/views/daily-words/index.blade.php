@@ -64,7 +64,7 @@
                                     <td>{{ $exercise->date }}</td>
                                     <td>
                                         <audio controls>
-                                            <source src="{{ asset('storage/' . $word->audio_file) }}" type="audio/mpeg">
+                                            <source src="{{ Storage::disk("s3")->url($word->audio_file) }}" type="audio/mpeg">
                                             Your browser does not support the audio element.
                                         </audio>
                                     </td>

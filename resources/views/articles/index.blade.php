@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{ $article->title }}</td>
                                 <td>{{ \Illuminate\Support\Str::words($article->content, 5, '...') }}</td>
-                                <td> <img src="{{asset('storage/'. $article->image)}} " width="50px" height="50px"></td>
+                                <td> <img src="{{ Storage::disk('s3')->url($article->image) }} " width="50px" height="50px"></td>
                                 <td>
                                     <div class="d-flex justify-content-center flex-shrink-0">
                                         <a href="{{route('articles.edit',$article)}}"

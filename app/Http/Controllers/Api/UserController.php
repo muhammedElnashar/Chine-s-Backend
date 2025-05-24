@@ -29,9 +29,9 @@ class UserController extends Controller
             }
             if ($request->hasFile('image')) {
                 if ($user->image) {
-                    Storage::disk('public')->delete($user->image);
+                    Storage::disk('s3')->delete($user->image);
                 }
-                $user->image = $request->file('image')->store('images/users', 'public');
+                $user->image = $request->file('image')->storePublicly('images/users', 's3');
             }
             $user->save();
             return response()->json([
@@ -55,7 +55,7 @@ class UserController extends Controller
                 ], 422);
             }
             if ($user->image) {
-                Storage::disk('public')->delete($user->image);
+                Storage::disk('s3')->delete($user->image);
             }
             $user->delete();
             return response()->json([

@@ -34,7 +34,7 @@ class ArticleController extends Controller
     {
         $data=$request->validated();
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images/articles', 'public');
+            $path = $request->file('image')->storePublicly('images/articles', 's3');
             $data['image']=$path;
         }
         Article::create($data);
@@ -63,16 +63,21 @@ class ArticleController extends Controller
     public function update(UpdateArticleRequest $request, Article $article)
     {
         $data = $request->validated();
-        if ($request->hasFile('image')){
-            if ($article->image){
-                Storage::disk('public')->delete($article->image);
+
+        if ($request->hasFile('image')) {
+            if ($article->image) {
+                Storage::disk('s3')->delete($article->image);
             }
-            $path = $request->file('image')->store('images/articles', 'public');
-            $data['image']=$path;
+
+            $path = $request->file('image')->storePublicly('images/articles', 's3');
+            $data['image'] = $path;
         }
+
         $article->update($data);
+
         return redirect()->route('articles.index')->with('success', 'Article updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -80,7 +85,7 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         if ($article->image){
-            Storage::disk('public')->delete($article->image);
+            Storage::disk('s3')->delete($article->image);
         }
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'Article deleted successfully.');

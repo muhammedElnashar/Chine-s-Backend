@@ -9,6 +9,7 @@ use App\Models\DailyExercise;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DailyAudioWordController extends Controller
 {
@@ -40,13 +41,17 @@ class DailyAudioWordController extends Controller
             ]);
 
             foreach ($validated['words'] as $word) {
-                $path = $word['audio']->store('audio_words', 'public');
+                $path = $word['audio']->store('audio/dailyWords', 's3');
+
+                Storage::disk('s3')->setVisibility($path, 'public');
+
                 DailyAudioWord::create([
                     'daily_exercise_id' => $exercise->id,
                     'audio_file' => $path,
                     'word_meaning' => $word['meaning'],
                 ]);
             }
+
 
             DB::commit();
 

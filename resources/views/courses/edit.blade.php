@@ -47,11 +47,15 @@
                                     </select>
                                     @error('type')<small class="text-danger">{{ $message }}</small>@enderror
                                 </div>
-
+                                <div class="mb-7">
+                                    <label class="form-label required">Price</label>
+                                    <input type="number"  name="price" value="{{ old('price',$course->price) }}" class="form-control form-control-solid mb-2" placeholder="Enter  price" />
+                                    @error('price')<small class="text-danger">{{ $message }}</small>@enderror
+                                </div>
                                 <div class="mb-7">
                                     <label class="form-label">Current Image</label><br />
                                     @if($course->image)
-                                        <img src="{{ asset('storage/' . $course->image) }}" width="100" alt="Course Image">
+                                        <img src="{{ Storage::disk('s3')->url($course->image) }}" width="100" alt="Course Image">
                                     @else
                                         <p>No Image Uploaded</p>
                                     @endif
