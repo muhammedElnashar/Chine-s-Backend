@@ -225,16 +225,12 @@
             }
 
             function formatDuration(seconds) {
-                const hours = Math.floor(seconds / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                const secs = Math.floor(seconds % 60);
-
-                return [
-                    hours > 0 ? hours : null,
-                    minutes.toString().padStart(2, '0'),
-                    secs.toString().padStart(2, '0')
-                ].filter(Boolean).join(':');
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                const decimalMinutes = minutes + (remainingSeconds / 60);
+                return Number(decimalMinutes.toFixed(2));
             }
+
 
             function cancelUpload(container) {
                 const uploadId = container.data('upload-id');

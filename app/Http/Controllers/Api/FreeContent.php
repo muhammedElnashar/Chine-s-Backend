@@ -25,12 +25,12 @@ class FreeContent extends Controller
     }
     public function getAllFreeCourses()
     {
-        $freeCourses = Course::with('levels.videos','levels.exam.questions.answers')->where('type', CourseTypeEnum::Free)->paginate(5);
-        // Return the articles as a JSON response
+        $freeCourses = Course::with('levels.videos')->where('type', CourseTypeEnum::Free)->paginate(10);
+
         return response()->json([
             'status' => true,
             'message' => 'Free Courses List',
-            'data'=>  CourseResource::collection($freeCourses),
-        ],200);
+            'data' => CourseResource::collection($freeCourses),
+        ]);
     }
 }

@@ -28,7 +28,6 @@ class StoreCourseRequest extends FormRequest
             'description' => 'nullable|string',
             'type' => ['required', 'string', Rule::in(array_column(CourseTypeEnum::cases(), 'value'))],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required|numeric|min:0',
         ];
     }
 }

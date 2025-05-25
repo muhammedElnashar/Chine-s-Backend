@@ -20,6 +20,8 @@
                             <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th>Title</th>
                                 <th>Position</th>
+                                <th>Price</th>
+                                <th>Is Free</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                             </thead>
@@ -27,7 +29,16 @@
                             @foreach($levels as $level)
                                 <tr>
                                     <td>{{ $level->title }}</td>
-                                    <td>{{ $level->position ?? '-' }}</td>
+                                    <td>{{ $level->position  }}</td>
+                                    <td>{{ $level->price}}</td>
+                                    @if($level->is_free)
+                                        <td>Yes</td>
+                                    @else
+                                        <td>No</td>
+
+                                    @endif
+
+
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center flex-shrink-0">
                                             <a href="{{ route('courses.levels.exams.index', [$course, $level]) }}" class="btn btn-bg-light btn-active-color-primary btn-sm ms-2">Exam</a>

@@ -30,12 +30,13 @@ class LevelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLevelRequest $request,Course $course)
+    public function store(StoreLevelRequest $request, Course $course)
     {
         $data = $request->validated();
         $maxPosition = $course->levels()->max('position') ?? 0;
         $data['position'] = $maxPosition + 1;
         $course->levels()->create($data);
+
         return redirect()->route('courses.levels.index', $course)->with('success', 'Level created successfully.');
     }
 

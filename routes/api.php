@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DailyContent;
 use App\Http\Controllers\Api\EmailVerify;
 use App\Http\Controllers\Api\FreeContent;
+use App\Http\Controllers\Api\LevelController;
+use App\Http\Controllers\Api\PaidCoursesController;
 use App\Http\Controllers\Api\ResetPassword;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('delete/user/profile', [UserController::class, 'deleteUserProfile']);
     Route::get('articles', [FreeContent::class, 'getAllArticles']);
     Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
+    Route::get('paid/courses', [PaidCoursesController::class, 'getAllPaidCourses']);
     Route::get('daily/questions', [DailyContent::class, 'getDailyTextExercise']);
     Route::get('daily/words', [DailyContent::class, 'getDailyAudioExercise']);
+    Route::get('/level/{id}', [LevelController::class, 'getLevelDetails']);
 
 });

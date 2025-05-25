@@ -14,14 +14,27 @@ class CourseResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {return [
-        'id' => $this->id,
-        'title' => $this->title,
-        'description' => $this->description,
-        'image' => $this->image ? Storage::disk('s3')->url($this->image) : null,
-        'type' => $this->type,
-        'price' => $this->price,
-        'levels' => LevelResource::collection($this->levels),
-    ];
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'image' => $this->image ? Storage::disk('s3')->url($this->image) : null,
+            'type' => $this->type,
+            'levels' => $this->levels->map(function ($level) {
+                $totalDuration = $level->videos->sum('duration');
+                $videoCount = $level->videos->count();
+
+                return [
+                    'id' => $level->id,
+                    'title' => $level->title,
+                    'position' => $level->position,
+                    'price' => $level->is_free ? null : $level->price,
+                    'is_free' => $level->is_free ? true : false,
+                    'videos_count' => $videoCount,
+                    'total_duration' => $totalDuration, // مدة الإجمالية (ثواني أو دقائق حسب التخزين)
+                ];
+            }),
+        ];
     }
 }

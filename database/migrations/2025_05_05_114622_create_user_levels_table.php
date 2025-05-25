@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('videos', function (Blueprint $table) {
+        Schema::create('user_levels', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('level_id')->constrained()->onDelete('cascade');
-            $table->string('title');
-            $table->string('video_url');
-            $table->float('duration')->nullable();
+            $table->timestamp('purchased_at')->nullable();
             $table->timestamps();
+            $table->unique(['user_id', 'level_id']);
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('videos');
+        Schema::dropIfExists('user_levels');
     }
 };

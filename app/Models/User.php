@@ -49,4 +49,16 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+    public function purchasedLevels()
+    {
+        return $this->belongsToMany(Level::class, 'user_levels')
+            ->withTimestamps();
+    }
+
+
+    public function hasPurchasedLevel($levelId)
+    {
+        return $this->purchasedLevels()->where('level_id', $levelId)->exists();
+    }
+
 }

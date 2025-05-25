@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->integer('position');
+            $table->integer('position')->default(1);
+            $table->decimal('price', 8, 2)->default(0);
+            $table->boolean('is_free')->default(false);
             $table->timestamps();
         });
     }

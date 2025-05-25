@@ -23,6 +23,8 @@ class UpdateLevelRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-        ];
+            'is_free' => 'required|boolean',
+            'price' => 'required_if:is_free,0|numeric|min:0',
+            ];
     }
 }
