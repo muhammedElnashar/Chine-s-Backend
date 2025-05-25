@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class VideoResource extends JsonResource
 {
@@ -24,7 +25,7 @@ class VideoResource extends JsonResource
             'title' => $this->title,
 
             'video_url' => $hasAccess
-                ? asset("https://chines-app-courses.s3.us-east-1.amazonaws.com/" . $this->video_url)
+                ?Storage::disk('s3')->url($this->video_url)
                 : null,
             'duration' => $this->duration,
             'can_access' => $hasAccess,
