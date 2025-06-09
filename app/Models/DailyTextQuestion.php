@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailyTextQuestion extends Model
 {
-    protected $fillable = ['question_text', 'daily_exercise_id'];
+    protected $fillable = ['daily_exercise_id', 'question_type', 'question_text', 'question_media_url','explanation'];
 
     public function exercise()
     {

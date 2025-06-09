@@ -23,22 +23,11 @@
                             @error('title')<small class="text-danger">{{ $message }}</small>@enderror
                         </div>
 
-                        <div class="mb-7">
-                            <label class="form-label required">Is this Level Free?</label>
-                            <select name="is_free" id="is_free" class="form-select form-select-solid"
-                                    data-control="select2" data-placeholder="Select option" required>
-                                <option value="">Select Option</option>
-                                <option value="1" {{ old('is_free', $level->is_free) == '1' ? 'selected' : '' }}>Yes (Free)</option>
-                                <option value="0" {{ old('is_free', $level->is_free) == '0' ? 'selected' : '' }}>No (Paid)</option>
-                            </select>
-                            @error('is_free')<small class="text-danger">{{ $message }}</small>@enderror
-                        </div>
 
-                        <div class="mb-7" id="price_field">
-                            <label class="form-label">Level Price</label>
-                            <input type="number" step="0.01" min="0" name="price" value="{{ old('price', $level->price ?? 0) }}"
-                                   class="form-control form-control-solid mb-2" placeholder="Enter Price" />
-                            @error('price')<small class="text-danger">{{ $message }}</small>@enderror
+                        <div class="mb-7">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control form-control-solid mb-2" rows="4" placeholder="Enter Course Description">{{ old('description', $level->description) }}</textarea>
+                            @error('description')<small class="text-danger">{{ $message }}</small>@enderror
                         </div>
 
                         <div class="text-center pt-10">

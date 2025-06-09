@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Level extends Model
 {
-    protected $fillable = ['course_id', 'title', 'position', 'price', 'is_free'];
+    protected $fillable = ['course_id', 'title', 'position', 'description',];
 
     public function course()
     {
@@ -18,11 +18,6 @@ class Level extends Model
         return $this->hasMany(Video::class);
     }
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'user_levels')
-            ->withTimestamps();
-    }
     public function exam()
     {
         return $this->hasOne(LevelExam::class);

@@ -3,7 +3,9 @@
 
 namespace App\Http\Requests;
 
-class UpdateLevelExamRequest extends StoreLevelExamRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class UpdateLevelExamRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,17 +20,22 @@ class UpdateLevelExamRequest extends StoreLevelExamRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'questions' => 'required|array|min:1',
-            'questions.*.id' => 'nullable|integer|exists:level_exam_questions,id',
-            'questions.*.question_text' => 'required|string|max:1000',
+            'questions.*.question_text' => 'nullable|string|max:1000',
+            'questions.*.question_type' => 'required|in:text,image,video,audio',
+            'questions.*.question_media' => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi,mp3,wav',
+            'questions.*.explanation' => 'nullable|string',
             'questions.*.answers' => 'required|array|min:2',
-            'questions.*.answers.*.id' => 'nullable|integer|exists:level_exam_answers,id',
-            'questions.*.answers.*.text' => 'required|string|max:500',
-            'questions.*.correct_answer' => 'required|integer|in:0,1,2,3',
+            'questions.*.answers.*' => 'required|max:1000',
+            'questions.*.correct_answer' => 'required|integer|min:0',
+
+
         ];
-    }}
+    }
+
+}

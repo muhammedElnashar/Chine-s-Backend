@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LevelExamQuestion extends Model
 {
-    protected $fillable = ['level_exam_id', 'question_text'];
+    protected $fillable = ['level_exam_id', 'question_text','question_type','question_media_url','explanation'];
     public function exam()
     {
         return $this->belongsTo(LevelExam::class, 'level_exam_id');

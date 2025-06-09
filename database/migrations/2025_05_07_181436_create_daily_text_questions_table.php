@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('daily_text_questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('daily_exercise_id')->constrained()->onDelete('cascade');
-            $table->string('question_text');
+            $table->string('question_type')->default('text'); // text, image, video, audio
+            $table->text('question_text')->nullable();
+            $table->string('question_media_url')->nullable();
+            $table->text('explanation')->nullable();
             $table->timestamps();
         });
     }

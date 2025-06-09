@@ -12,6 +12,10 @@ class DailyExercise extends Model
     {
         return $this->hasMany(DailyTextQuestion::class);
     }
+    public function attempts()
+    {
+        return $this->hasMany(DailyExerciseAttempt::class);
+    }
     public function audioWords()
     {
         return $this->hasMany(DailyAudioWord::class);

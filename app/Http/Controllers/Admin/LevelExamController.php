@@ -12,6 +12,7 @@ use App\Models\LevelExamAnswer;
 use App\Models\LevelExamQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LevelExamController extends Controller
 {
@@ -57,9 +58,16 @@ class LevelExamController extends Controller
                 'description' => $data['description'],
             ]);
             foreach ($data['questions'] as $question) {
+                $mediaUrl = null;
+                if ($question['question_type'] != 'text' && isset($question['question_media'])) {
+                    $mediaUrl = $question['question_media']->storePublicly('questions_media', 's3');
+                }
                 $questionId = LevelExamQuestion::insertGetId([
                     'level_exam_id' => $exam->id,
-                    'question_text' => $question['question_text'],
+                    'question_type' => $question['question_type'],
+                    'question_text' => $question['question_type'] == 'text' ? $question['question_text'] : null,
+                    'question_media_url' => $mediaUrl,
+                    'explanation' => $question['explanation'] ?? null,
                     'created_at' => now(),
                 ]);
                 foreach ($question['answers'] as $index => $answer) {
@@ -117,16 +125,31 @@ class LevelExamController extends Controller
             ]);
 
             foreach ($exam->questions as $question) {
+                if ($question->question_media_url) {
+                    Storage::disk('s3')->delete($question->question_media_url);
+                }
                 $question->answers()->delete();
             }
             $exam->questions()->delete();
 
-            foreach ($data['questions'] as $question) {
+            foreach ($data['questions'] as $qIndex => $question) {
+                $mediaPath = null;
+                $type = $question['question_type'] ?? 'text';
+
+                if ($type !== 'text' && isset($question['question_media']) && is_object($question['question_media'])) {
+                    $mediaPath = $question['question_media']->storePublicly('questions_media', 's3');
+                }
+                $questionText = $type === 'text' ? $question['question_text'] : null;
+
                 $questionModel = LevelExamQuestion::create([
                     'level_exam_id' => $exam->id,
-                    'question_text' => $question['question_text'],
+                    'question_text' => $questionText,
+                    'question_type' => $type,
+                    'question_media_url' => $mediaPath,
+                    'explanation' => $question['explanation'] ?? null,
                 ]);
 
+                // حفظ الإجابات
                 foreach ($question['answers'] as $index => $answer) {
                     LevelExamAnswer::create([
                         'question_id' => $questionModel->id,
@@ -136,17 +159,12 @@ class LevelExamController extends Controller
                 }
             }
 
-            // احذف درجات الطلاب المرتبطة بهذا الامتحان (اختياري، لو تبي تحافظ عليها لا تحذف)
-            // StudentExamScore::where('level_exam_id', $exam->id)->delete();
-
             DB::commit();
 
             return redirect()->route('courses.levels.exams.index', [$course, $level])
                 ->with('success', 'Exam updated successfully.');
-
         } catch (\Throwable $e) {
             DB::rollBack();
-
             return redirect()->back()->with('error', 'An error occurred while updating the exam: ' . $e->getMessage());
         }
     }
@@ -155,8 +173,23 @@ class LevelExamController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Course $course, Level $level, LevelExam $exam)
     {
-        //
+        DB::beginTransaction();
+        try {
+            foreach ($exam->questions as $question) {
+                if ($question->question_media_url) {
+                    Storage::disk('s3')->delete($question->question_media_url);
+                }
+                $question->answers()->delete();
+            }
+            $exam->questions()->delete();
+            $exam->delete();
+            DB::commit();
+            return redirect()->route('courses.levels.exams.index', [$course, $level])->with('success', 'Exam deleted successfully.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An error occurred while deleting the exam.');
+        }
     }
 }

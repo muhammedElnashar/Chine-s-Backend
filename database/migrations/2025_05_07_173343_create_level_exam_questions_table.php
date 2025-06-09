@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('level_exam_questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('level_exam_id')->constrained('level_exams')->onDelete('cascade'); // رابط مع level_exams
-            $table->string('question_text');
+            $table->string('question_type')->default('text');
+            $table->text('question_text')->nullable();
+            $table->string('question_media_url')->nullable();
+            $table->text('explanation')->nullable();
             $table->timestamps();
         });
     }

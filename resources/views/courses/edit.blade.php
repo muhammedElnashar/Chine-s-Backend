@@ -48,6 +48,11 @@
                                     @error('type')<small class="text-danger">{{ $message }}</small>@enderror
                                 </div>
                                 <div class="mb-7">
+                                    <label class="form-label required">Price</label>
+                                    <input type="number" name="price" value="{{ old('price' , $course->price) }}" class="form-control form-control-solid mb-2" placeholder="Enter Course Price" />
+                                    @error('price')<small class="text-danger">{{ $message }}</small>@enderror
+                                </div>
+                                <div class="mb-7">
                                     <label class="form-label">Current Image</label><br />
                                     @if($course->image)
                                         <img src="{{ Storage::disk('s3')->url($course->image) }}" width="100" alt="Course Image">

@@ -19,9 +19,8 @@
                             <thead>
                             <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th>Title</th>
+                                <th>Description</th>
                                 <th>Position</th>
-                                <th>Price</th>
-                                <th>Is Free</th>
                                 <th class="text-center">Actions</th>
                             </tr>
                             </thead>
@@ -29,15 +28,8 @@
                             @foreach($levels as $level)
                                 <tr>
                                     <td>{{ $level->title }}</td>
+                                    <td>{{ $level->description}}</td>
                                     <td>{{ $level->position  }}</td>
-                                    <td>{{ $level->price}}</td>
-                                    @if($level->is_free)
-                                        <td>Yes</td>
-                                    @else
-                                        <td>No</td>
-
-                                    @endif
-
 
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center flex-shrink-0">

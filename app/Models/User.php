@@ -49,16 +49,20 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
-    public function purchasedLevels()
+    public function purchasedCourses()
     {
-        return $this->belongsToMany(Level::class, 'user_levels')
-            ->withTimestamps();
+        return $this->belongsToMany(Course::class, 'user_courses')->withTimestamps()->withPivot('purchased_at');
     }
 
 
-    public function hasPurchasedLevel($levelId)
+    public function levelExamAttempts()
     {
-        return $this->purchasedLevels()->where('level_id', $levelId)->exists();
+        return $this->hasMany(LevelExamAttempt::class, 'student_id');
+    }
+
+    public function dailyExerciseAttempts()
+    {
+        return $this->hasMany(DailyExerciseAttempt::class, 'student_id');
     }
 
 }

@@ -24,6 +24,8 @@
                             <th>Description</th>
                             <th>Type</th>
                             <th>Image</th>
+                            <th>Price</th>
+
                             <th class="text-center">Actions</th>
                         </tr>
                         </thead>
@@ -38,6 +40,8 @@
                                         <img src="{{ Storage::disk('s3')->url($course->image) }}" width="50" height="50" alt="Course Image">
                                     @endif
                                 </td>
+                                <td>{{ $course->price }}</td>
+
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center flex-shrink-0">
                                         <a href="{{ route('courses.levels.index', $course) }}" class="btn  btn-bg-light btn-active-color-primary btn-sm ms-2">Manage Levels</a>

@@ -39,6 +39,12 @@
                                     @error('type')<small class="text-danger">{{ $message }}</small>@enderror
                                 </div>
                                 <div class="mb-7">
+                                    <label class="form-label required">Price</label>
+                                    <input type="number" name="price" value="{{ old('price' , 0) }}" class="form-control form-control-solid mb-2" placeholder="Enter Course Price" />
+                                    @error('price')<small class="text-danger">{{ $message }}</small>@enderror
+                                </div>
+
+                                <div class="mb-7">
                                     <label class="form-label ">Image</label>
                                     <input type="file" name="image" class="form-control form-control-solid mb-2" />
                                     @error('image')<small class="text-danger">{{ $message }}</small>@enderror
