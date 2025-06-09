@@ -17,6 +17,10 @@ class Level extends Model
     {
         return $this->hasMany(Video::class);
     }
+    public function files()
+    {
+        return $this->hasMany(LevelFile::class);
+    }
 
     public function exam()
     {

@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('courses', CoursesController::class);
     Route::resource('courses.levels', LevelController::class);
     Route::resource('courses.levels.exams', LevelExamController::class);
+    Route::resource('courses.levels.files', \App\Http\Controllers\Admin\LevelFileController::class);
     Route::resource('courses.levels.videos', VideoController::class);
     Route::post('/s3/multipart-urls', [VideoController::class, 'getMultipartUploadUrls'])->name('s3.multipart-urls');
     Route::post('/s3/multipart-complete', [VideoController::class, 'completeMultipartUpload'])->name('s3.multipart-complete');
