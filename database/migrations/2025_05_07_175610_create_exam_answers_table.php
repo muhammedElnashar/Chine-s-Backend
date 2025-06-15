@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-            Schema::create('level_exam_answers', function (Blueprint $table) {
+            Schema::create('exam_answers', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('question_id')->constrained('level_exam_questions')->onDelete('cascade');
+                $table->foreignId('question_id')->constrained('exam_questions')->onDelete('cascade');
                 $table->string('answer_text');
                 $table->boolean('is_correct')->default(false);
                 $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('level_exam_answers');
+        Schema::dropIfExists('exam_answers');
     }
 };

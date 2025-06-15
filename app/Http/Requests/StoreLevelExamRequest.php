@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\LevelExam;
+use App\Models\Exam;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLevelExamRequest extends FormRequest

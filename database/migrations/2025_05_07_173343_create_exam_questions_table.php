@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('level_exam_questions', function (Blueprint $table) {
+        Schema::create('exam_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('level_exam_id')->constrained('level_exams')->onDelete('cascade'); // رابط مع level_exams
+            $table->foreignId('exam_id')->constrained('exams')->onDelete('cascade'); // رابط مع level_exams
             $table->string('question_type')->default('text');
             $table->text('question_text')->nullable();
             $table->string('question_media_url')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('level_exam_questions');
+        Schema::dropIfExists('exam_questions');
     }
 };

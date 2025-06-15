@@ -9,10 +9,10 @@
             <div class="app-toolbar p-3">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                        <h1 class="page-heading text-dark fw-bolder fs-2">Edit Exam for Level: {{ $level->title }}</h1>
+                        <h1 class="page-heading text-dark fw-bolder fs-2">Edit Exam for Course: {{ $course->title }}</h1>
                     </div>
                     <div>
-                        <a href="{{ route('courses.levels.index', [$course, $level]) }}" class="btn btn-light" style="border-radius: 20px;">Back to Level</a>
+                        <a href="{{ route('courses.index', $course) }}" class="btn btn-light" style="border-radius: 20px;">Back to Courses</a>
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 <div class="app-container container-xxl">
                     <div class="card card-flush">
                         <div class="card-body pt-6">
-                            <form method="POST" action="{{ route('courses.levels.exams.update', [$course, $level, $exam]) }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('courses.exams.update', [$course, $exam]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -148,7 +148,6 @@
             <h4 class="mb-3">Question <span class="question-number">${index + 1}</span></h4>
 
 
-
             <div class="mb-4">
                 <label class="form-label required">Question Type</label>
                 <select name="questions[${index}][question_type]" class="form-select question-type-select" data-index="${index}" required>
@@ -156,9 +155,10 @@
                 </select>
             </div>
             <div class="mb-4 question-text-input" data-index="${index}">
-                <label class="form-label  required">Question Text</label>
+                <label class="form-label required">Question Text</label>
                 <input type="text" name="questions[${index}][question_text]" class="form-control" required>
             </div>
+
 
             <div class="mb-4 question-file-upload" style="display:none;" data-index="${index}">
                 <label class="form-label">Upload Question File</label>
@@ -171,7 +171,7 @@
             </div>
 
             <h5>Answers</h5>
-            ${[0, 1, 2, 3].map(i => `
+            ${[0,1,2,3].map(i => `
                 <div class="input-group input-group-solid mb-3">
                     <input type="text" name="questions[${index}][answers][]" class="form-control" placeholder="Answer ${i + 1}" required>
                     <div class="input-group-text">

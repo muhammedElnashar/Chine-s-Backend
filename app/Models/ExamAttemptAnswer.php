@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LevelExamAttemptAnswer extends Model
+class ExamAttemptAnswer extends Model
 {
     protected $fillable = [
         'attempt_id',
@@ -15,17 +15,17 @@ class LevelExamAttemptAnswer extends Model
 
     public function attempt()
     {
-        return $this->belongsTo(LevelExamAttempt::class, 'attempt_id');
+        return $this->belongsTo(ExamAttempt::class, 'attempt_id');
     }
 
     public function question()
     {
-        return $this->belongsTo(LevelExamQuestion::class, 'question_id');
+        return $this->belongsTo(ExamQuestion::class, 'question_id');
     }
 
     public function answer()
     {
-        return $this->belongsTo(LevelExamAnswer::class, 'answer_id');
+        return $this->belongsTo(ExamAnswer::class, 'answer_id');
     }
 }
 

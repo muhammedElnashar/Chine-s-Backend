@@ -1,7 +1,7 @@
 @extends("layouts.app")
 
 @section('title')
-    Create Level Exam
+    Create Course Exam
 @endsection
 
 @section('content')
@@ -11,11 +11,11 @@
                 <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                         <h1 class="page-heading d-flex text-dark fw-bolder fs-2 flex-column justify-content-center my-0">
-                            Create Exam for Level: {{ $level->title ?? '' }}
+                            Create Exam for Level: {{ $course->title ?? '' }}
                         </h1>
                     </div>
                     <div>
-                        <a href="{{ route('courses.levels.exams.index', [$course, $level]) }}" class="btn btn-light"
+                        <a href="{{ route('courses.exams.index', $course) }}" class="btn btn-light"
                            style="border-radius: 20px;">Back to Exam</a>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                     <div class="card card-flush">
                         <div class="card-body pt-6">
                             <form id="exam-form" method="POST"
-                                  action="{{ route('courses.levels.exams.store', [$course, $level]) }}"
+                                  action="{{ route('courses.exams.store', $course) }}"
                                   enctype="multipart/form-data">
                                 @csrf
 

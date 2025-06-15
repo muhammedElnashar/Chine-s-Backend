@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LevelExamAttempt extends Model
+class ExamAttempt extends Model
 {
     protected $fillable = [
-        'level_exam_id',
+        'exam_id',
         'student_id',
         'score',
     ];
 
     public function exam()
     {
-        return $this->belongsTo(LevelExam::class, 'level_exam_id');
+        return $this->belongsTo(Exam::class, 'exam_id');
     }
 
     public function student()
@@ -24,7 +24,7 @@ class LevelExamAttempt extends Model
 
     public function answers()
     {
-        return $this->hasMany(LevelExamAttemptAnswer::class, 'attempt_id');
+        return $this->hasMany(ExamAttemptAnswer::class, 'attempt_id');
     }
 }
 
