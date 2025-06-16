@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('daily_exercises', function (Blueprint $table) {
             $table->id();
-            $table->date('date')->unique();
+            $table->date('date');
+            $table->string('type');
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->timestamps();
+            $table->unique(['date', 'type']);
+
         });
     }
 

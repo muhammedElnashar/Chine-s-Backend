@@ -55,9 +55,9 @@
                             </a>
                         </div>
                         <div class="menu-item me-lg-1">
-                            <a class="menu-link {{ Request::routeIs('questions.index') || Request::routeIs('questions.create')  ? 'active' : '' }}  py-3"
-                                href="{{ route('questions.create') }}">
-                                <span class="menu-title fs-6">Add Daily Text Exercise</span>
+                            <a class="menu-link {{ Request::routeIs('exercises.index') || Request::routeIs('exercises.create')|| Request::routeIs('exercises.edit')|| Request::routeIs('exercises.show')  ? 'active' : '' }}  py-3"
+                                href="{{ route('exercises.create') }}">
+                                <span class="menu-title fs-6">Add Daily Quiz</span>
                             </a>
                         </div>
                         <div class="menu-item me-lg-1">

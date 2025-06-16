@@ -2,39 +2,54 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\DailyExerciseTypeEnum;
 use App\Models\DailyExercise;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreQuestionsRequest extends FormRequest
+class StoreQuizRequest extends FormRequest
 {
     public function authorize()
     {
         return true;
     }
 
-    public function rules()
+
+    public function rules(): array
     {
-        return [
+        $rules = [
             'exercise_date' => 'required|date',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'questions' => 'required|array|min:1',
-            'questions.*.question_text' => 'required|string|max:255',
-            'questions.*.answers' => 'required|array|size:4',
-            'questions.*.answers.*' => 'required|string|max:255',
-            'questions.*.correct_answer' => 'required|integer|in:0,1,2,3',
+            'questions.*.question_type' => 'required|in:text,image,video,audio',
+            'questions.*.answers' => 'required|array|min:2',
+            'questions.*.answers.*' => 'required|string|max:500',
+            'questions.*.correct_answer' => 'required|integer',
+            'questions.*.explanation' => 'nullable|string|max:1000',
         ];
+
+        foreach ($this->input('questions', []) as $index => $question) {
+            if ($question['question_type'] === 'text') {
+                $rules["questions.$index.question_text"] = 'required|string|max:1000';
+            } else {
+                $rules["questions.$index.question_media"] = 'required|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi,mp3,wav|max:10240'; // 10MB max example
+            }
+        }
+
+        return $rules;
     }
 
-    public function messages()
+    public function messages(): array
     {
-        $messages = [
-            'exercise_date.required' => 'Exercise date is required.',
-            'exercise_date.date' => 'Please enter a valid date.',
-            'exercise_date.unique' => 'There is already an exercise for this date.',
+        $messages= [
+            'title.required' => 'The title is required.',
+            'title.string' => 'The title must be a string.',
+            'title.max' => 'The title may not be greater than 255 characters.',
+            'description.string' => 'The description must be a string.',
             'questions.required' => 'At least one question is required.',
             'questions.array' => 'Questions must be in an array format.',
             'questions.min' => 'At least one question is required.',
         ];
-
         // Dynamic messages for each question
         foreach ($this->input('questions', []) as $qIndex => $question) {
             $qNumber = $qIndex + 1;
@@ -65,12 +80,10 @@ class StoreQuestionsRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $date = $this->input('exercise_date');
-
-            $exercise = DailyExercise::where('date', $date)->first();
-
-            if ($exercise && $exercise->questions()->exists()) {
-                $validator->errors()->add('exercise_date', 'Text Exercise already exists for this date.');
+            if (DailyExercise::where('date', $date)->where('type', DailyExerciseTypeEnum::Quiz)->exists()) {
+                $validator->errors()->add('exercise_date', 'Quiz already exists for this date.');
             }
+
 
         });
     }

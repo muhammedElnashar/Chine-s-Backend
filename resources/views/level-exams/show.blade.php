@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Show Exam' . $exam->title)
+@section('title', 'Show Exam')
 
 @section('content')
     <div class="app-main flex-column flex-row-fluid" id="kt_app_main">

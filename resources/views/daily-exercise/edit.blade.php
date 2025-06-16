@@ -9,10 +9,10 @@
             <div class="app-toolbar p-3">
                 <div class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                        <h1 class="page-heading text-dark fw-bolder fs-2">Edit Section Exam</h1>
+                        <h1 class="page-heading text-dark fw-bolder fs-2">Edit Quiz</h1>
                     </div>
                     <div>
-                        <a href="{{ route('courses.levels.index', [$course, $level]) }}" class="btn btn-light" style="border-radius: 20px;">Back to Level</a>
+                        <a href="{{ route('exercises.index') }}" class="btn btn-light" style="border-radius: 20px;">Back to Quiz List</a>
                     </div>
                 </div>
             </div>
@@ -21,13 +21,21 @@
                 <div class="app-container container-xxl">
                     <div class="card card-flush">
                         <div class="card-body pt-6">
-                            <form method="POST" action="{{ route('courses.levels.exams.update', [$course, $level, $exam]) }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('exercises.update', $exercise) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-
+                                <div class="fv-row mb-7">
+                                    <label class="fs-6 fw-semibold form-label mb-2">
+                                        <span class="required">Exercise Date</span>
+                                    </label>
+                                    <input type="date" name="exercise_date" class="form-control" value="{{ old('date', $exercise->date) }}" required>
+                                    @error('exercise_date')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                                 <div class="mb-7">
                                     <label class="form-label required">Exam Title</label>
-                                    <input type="text" name="title" class="form-control form-control-solid @error('title') is-invalid @enderror" value="{{ old('title', $exam->title) }}" required>
+                                    <input type="text" name="title" class="form-control form-control-solid @error('title') is-invalid @enderror" value="{{ old('title', $exercise->title) }}" required>
                                     @error('title')
                                     <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -35,7 +43,7 @@
 
                                 <div class="mb-7">
                                     <label class="form-label">Exam Description</label>
-                                    <textarea name="description" class="form-control form-control-solid @error('description') is-invalid @enderror">{{ old('description', $exam->description) }}</textarea>
+                                    <textarea name="description" class="form-control form-control-solid @error('description') is-invalid @enderror">{{ old('description', $exercise->description) }}</textarea>
                                     @error('description')
                                     <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -45,7 +53,7 @@
                                 <h3>Questions</h3>
 
                                 <div id="questions-container">
-                                    @foreach($exam->questions as $qIndex => $question)
+                                    @foreach($exercise->questions as $qIndex => $question)
                                         @php
                                             $types = ['text' => 'Text', 'image' => 'Image', 'video' => 'Video', 'audio' => 'Audio'];
                                             $currentType = old("questions.$qIndex.type", $question->question_type ?? 'text');
@@ -138,7 +146,7 @@
 
 @push('script')
     <script>
-        let questionIndex = {{ $exam->questions->count() }};
+        let questionIndex = {{ $exercise->questions->count() }};
         const questionTypes = ['text', 'image', 'video', 'audio'];
 
         function generateQuestionHtml(index) {
@@ -148,7 +156,6 @@
             <h4 class="mb-3">Question <span class="question-number">${index + 1}</span></h4>
 
 
-
             <div class="mb-4">
                 <label class="form-label required">Question Type</label>
                 <select name="questions[${index}][question_type]" class="form-select question-type-select" data-index="${index}" required>
@@ -156,9 +163,10 @@
                 </select>
             </div>
             <div class="mb-4 question-text-input" data-index="${index}">
-                <label class="form-label  required">Question Text</label>
+                <label class="form-label required">Question Text</label>
                 <input type="text" name="questions[${index}][question_text]" class="form-control" required>
             </div>
+
 
             <div class="mb-4 question-file-upload" style="display:none;" data-index="${index}">
                 <label class="form-label">Upload Question File</label>
@@ -171,7 +179,7 @@
             </div>
 
             <h5>Answers</h5>
-            ${[0, 1, 2, 3].map(i => `
+            ${[0,1,2,3].map(i => `
                 <div class="input-group input-group-solid mb-3">
                     <input type="text" name="questions[${index}][answers][]" class="form-control" placeholder="Answer ${i + 1}" required>
                     <div class="input-group-text">
@@ -224,6 +232,5 @@
                 fileInput.prop('required', true);
             }
         });
-
     </script>
 @endpush

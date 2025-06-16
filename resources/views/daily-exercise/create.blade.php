@@ -1,7 +1,7 @@
 @extends("layouts.app")
 
 @section('title')
-    Create Section Exam
+    Create Daily Quiz
 @endsection
 
 @section('content')
@@ -11,12 +11,12 @@
                 <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
                     <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                         <h1 class="page-heading d-flex text-dark fw-bolder fs-2 flex-column justify-content-center my-0">
-                            Create Section Exam
+                            Create Daily Quiz
                         </h1>
                     </div>
                     <div>
-                        <a href="{{ route('courses.levels.exams.index', [$course, $level]) }}" class="btn btn-light"
-                           style="border-radius: 20px;">Back to Exams</a>
+                        <a href="{{ route('exercises.index') }}" class="btn btn-light"
+                           style="border-radius: 20px;">Back to Exercises</a>
                     </div>
                 </div>
             </div>
@@ -26,10 +26,18 @@
                     <div class="card card-flush">
                         <div class="card-body pt-6">
                             <form id="exam-form" method="POST"
-                                  action="{{ route('courses.levels.exams.store', [$course, $level]) }}"
+                                  action="{{ route('exercises.store') }}"
                                   enctype="multipart/form-data">
                                 @csrf
-
+                                <div class="fv-row mb-7">
+                                    <label class="fs-6 fw-semibold form-label mb-2">
+                                        <span class="required">Exercise Date</span>
+                                    </label>
+                                    <input type="date" name="exercise_date" class="form-control" required>
+                                    @error('exercise_date')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                                 <div class="mb-7">
                                     <label for="title" class="form-label required">Exam Title</label>
                                     <input type="text" id="title" name="title"
@@ -41,7 +49,7 @@
                                 </div>
 
                                 <div class="mb-7">
-                                    <label for="description" class="form-label">Exam Description (optional)</label>
+                                    <label for="description" class="form-label">Exam Description </label>
                                     <textarea id="description" name="description"
                                               class="form-control form-control-solid @error('description') is-invalid @enderror"
                                               rows="3">{{ old('description') }}</textarea>
@@ -313,3 +321,8 @@
         $('.question-type-select').trigger('change');
     </script>
 @endpush
+
+
+
+
+

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('daily_exercise_attempt_answers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('attempt_id')->constrained('daily_exercise_attempts')->onDelete('cascade');
-            $table->foreignId('question_id')->constrained('daily_text_questions')->onDelete('cascade');
-            $table->foreignId('answer_id')->constrained('daily_text_question_answers')->onDelete('cascade');
+            $table->foreignId('question_id')->constrained('daily_exercise_questions')->onDelete('cascade');
+            $table->foreignId('answer_id')->constrained('daily_exercise_question_answers')->onDelete('cascade');
             $table->boolean('is_correct')->default(false);
             $table->timestamps();
         });

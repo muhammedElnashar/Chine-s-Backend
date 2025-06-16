@@ -20,7 +20,7 @@ Auth::routes();
 Route::get('/home', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
 Route::middleware(['auth'])->group(function () {
     Route::resource('articles', ArticleController::class);
-    Route::resource('daily/questions', DailyQuestion::class);
+    Route::resource('daily/exercises', DailyQuestion::class);
     Route::resource('daily/words', DailyAudioWordController::class);
     Route::resource('courses', CoursesController::class);
     Route::resource('courses.exams', CourseExamController::class);

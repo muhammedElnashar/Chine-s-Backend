@@ -1,7 +1,7 @@
 @extends("layouts.app")
 
 @section('title')
-    Section Exams
+     Daily Exercises
 @endsection
 
 @push("css")
@@ -31,18 +31,31 @@
                     <div class="card-title"></div>
                     <div class="card-toolbar">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                            <a href="{{ route('courses.levels.exams.create', [$course, $level]) }}" class="btn btn-primary"
+                            <a href="{{ route('exercises.create') }}" class="btn btn-primary"
                                style="border-radius: 20px">Add Exam</a>
-                            <a href="{{ route('courses.levels.index', $course) }}" class="btn btn-light" style="border-radius: 20px;">Back to Sections</a>
 
                         </div>
                     </div>
                 </div>
                 <div class="card-body pt-0">
+                         <!-- Filter Form -->
+                         <div class="filter-form">
+                             <form method="GET" action="{{ route('exercises.index') }}">
+                                 <input type="text" name="title" placeholder="Search by Title" value="{{ request('title') }}" />
+                                 <input type="date" name="date" value="{{ request('date') }}" />
+                                 <button type="submit" class="btn btn-primary">
+                                     <span class="indicator-label">Filter</span>
+                                 </button>
+                                 <button type="button" class="btn btn-secondary ms-2"
+                                         onclick="window.location.href='{{ route('exercises.index') }}'">Clear Filter
+                                 </button>
+                             </form>
+                         </div>
 
                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                         <thead>
                         <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                            <th class="min-w-150px">Date</th>
                             <th class="min-w-150px">Title</th>
                             <th class="min-w-300px">Description</th>
                             <th class="min-w-150px">Created At</th>
@@ -50,20 +63,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($exams as $exam)
+                        @foreach($exercises as $exam)
                             <tr>
+                                <td>{{ $exam->date }}</td>
                                 <td>{{ $exam->title }}</td>
                                 <td>{{ Str::limit($exam->description, 50) }}</td>
                                 <td>{{ $exam->created_at->format('Y-m-d') }}</td>
                                 <td>
                                     <div class="d-flex justify-content-center flex-shrink-0">
-                                        <a href="{{ route('courses.levels.exams.show', [$course, $level, $exam]) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2" title="View">
+                                        <a href="{{ route('exercises.show',$exam->id) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('courses.levels.exams.edit', [$course, $level, $exam]) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2" title="Edit">
+                                        <a href="{{ route('exercises.edit',$exam->id) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-2" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form method="post" action="{{ route('courses.levels.exams.destroy', [$course, $level, $exam]) }}">
+                                        <form method="post" action="{{ route('exercises.destroy',$exam->id) }}">
                                             @csrf
                                             @method("DELETE")
                                             <button type="submit" class="btn btn-icon btn-bg-light btn-active-color-primary deleted-btn btn-sm" title="Delete">
@@ -77,7 +91,7 @@
                         </tbody>
                     </table>
                     <div>
-                        {{ $exams->links() }}
+                        {{ $exercises->links() }}
                     </div>
                 </div>
             </div>

@@ -24,13 +24,6 @@ class ExamController extends Controller
     {
         $query = Exam::where('level_id', $level->id);
 
-    /*    if ($request->filled('title')) {
-            $query->where('title', 'like', '%' . $request->title . '%');
-        }
-
-        if ($request->filled('date')) {
-            $query->whereDate('created_at', $request->date);
-        }*/
         $exams = $query->latest()->paginate(10);
 
         return view('level-exams.index', compact('course', 'level', 'exams'));
@@ -96,7 +89,7 @@ class ExamController extends Controller
      */
     public function show(Course $course, Level $level, Exam $exam)
     {
-        $exam->load('questions.answers'); // لتحميل العلاقات
+        $exam->load('questions.answers');
 
         return view('level-exams.show', compact('course', 'level', 'exam'));
     }

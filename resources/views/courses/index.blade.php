@@ -46,7 +46,7 @@
                                     <div class="d-flex justify-content-center flex-shrink-0">
                                         <a href="{{ route('courses.exams.index', $course) }}" class="btn btn-bg-light btn-active-color-primary btn-sm ms-2">Exam</a>
 
-                                        <a href="{{ route('courses.levels.index', $course) }}" class="btn  btn-bg-light btn-active-color-primary btn-sm ms-2">Manage Levels</a>
+                                        <a href="{{ route('courses.levels.index', $course) }}" class="btn  btn-bg-light btn-active-color-primary btn-sm ms-2">Manage Sections</a>
                                         <a href="{{route('courses.edit', $course)}}"
                                            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2">
                                             <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->

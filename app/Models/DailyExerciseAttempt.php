@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailyExerciseAttempt extends Model
 {
-    protected $fillable = ['daily_exercise_id', 'student_id', 'score'];
+    protected $fillable = ['exercise_id', 'student_id', 'score'];
 
     public function exercise()
     {
-        return $this->belongsTo(DailyExercise::class, 'daily_exercise_id');
+        return $this->belongsTo(DailyExercise::class, 'exercise_id');
     }
 
     public function student()

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('daily_audio_words', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('daily_exercise_id')->constrained()->onDelete('cascade');
+            $table->foreignId('exercise_id')->constrained('daily_exercises')->onDelete('cascade');
             $table->string('audio_file');
             $table->string('word_meaning');
             $table->timestamps();

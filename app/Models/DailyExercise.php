@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailyExercise extends Model
 {
-    protected $fillable = ['date'];
+    protected $fillable = ['date','type', 'title', 'description'];
+
 
     public function questions()
     {
-        return $this->hasMany(DailyTextQuestion::class);
+        return $this->hasMany(DailyExerciseQuestion::class, 'exercise_id');
     }
     public function attempts()
     {
@@ -18,7 +19,7 @@ class DailyExercise extends Model
     }
     public function audioWords()
     {
-        return $this->hasMany(DailyAudioWord::class);
+        return $this->hasMany(DailyAudioWord::class, 'exercise_id');
     }
 
 }

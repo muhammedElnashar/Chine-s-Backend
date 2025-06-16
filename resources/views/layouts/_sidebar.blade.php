@@ -91,8 +91,8 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link {{ Request::routeIs('questions.index') || Request::routeIs('questions.create') ? 'active' : '' }}"
-                        href="{{ route('questions.index') }}">
+                    <a class="menu-link {{ Request::routeIs('exercises.index') || Request::routeIs('exercises.create')|| Request::routeIs('exercises.edit')|| Request::routeIs('exercises.show') ? 'active' : '' }}"
+                        href="{{ route('exercises.index') }}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/art/art002.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -108,7 +108,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title fs-5">Daily Text Exercises</span>
+                        <span class="menu-title fs-5">Daily Quiz's</span>
                     </a>
                 </div>
                 <div class="menu-item">

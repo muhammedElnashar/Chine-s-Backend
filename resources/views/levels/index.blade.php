@@ -1,15 +1,15 @@
 @extends("layouts.app")
 
-@section('title', 'Levels for ' . $course->title)
+@section('title', 'Course Sections ' )
 
 @section('content')
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xl">
             <div class="card mx-auto" style="border-radius: 25px;">
                 <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
-                    <h3 class="card-title fw-bolder">Levels for Course: {{ $course->title }}</h3>
+                    <h3 class="card-title fw-bolder">Course Sections </h3>
                     <div class="card-toolbar">
-                        <a href="{{ route('courses.levels.create', $course) }}" class="btn btn-primary" style="border-radius: 20px">Add Level</a>
+                        <a href="{{ route('courses.levels.create', $course) }}" class="btn btn-primary" style="border-radius: 20px">Add Section</a>
                         <a href="{{ route('courses.index') }}" class="btn btn-light ms-2" style="border-radius: 20px">Back to Courses</a>
                     </div>
                 </div>

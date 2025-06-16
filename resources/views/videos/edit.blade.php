@@ -25,7 +25,7 @@
 
                                 <div class="mb-7">
                                     <label class="form-label required">Title</label>
-                                    <input type="text" name="title" value="{{ old('title', $video->title) }}" class="form-control form-control-solid mb-2" placeholder="Enter Course Title" />
+                                    <input type="text" name="title" value="{{ old('title', $video->title) }}" class="form-control form-control-solid mb-2" placeholder="Enter Video Title" />
                                     @error('title')<small class="text-danger">{{ $message }}</small>@enderror
                                 </div>
 

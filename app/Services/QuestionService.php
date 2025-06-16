@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Helpers\ErrorHandler;
 use App\Models\DailyExercise;
-use App\Models\DailyTextQuestion;
-use App\Models\DailyTextQuestionAnswer;
+use App\Models\DailyExerciseQuestion;
+use App\Models\DailyExerciseQuestionAnswer;
 use Illuminate\Support\Facades\DB;
 
 class QuestionService
@@ -41,9 +41,9 @@ class QuestionService
                 }
             }
 
-            DailyTextQuestion::insert($questionsData);
+            DailyExerciseQuestion::insert($questionsData);
 
-            $questions = DailyTextQuestion::where('daily_exercise_id', $exercise->id)->get();
+            $questions = DailyExerciseQuestion::where('daily_exercise_id', $exercise->id)->get();
 
             foreach ($questions as $key => $question) {
                 $start = $key * 4;
@@ -55,7 +55,7 @@ class QuestionService
                 }
 
 
-                DailyTextQuestionAnswer::insert($questionAnswers);
+                DailyExerciseQuestionAnswer::insert($questionAnswers);
             }
 
             DB::commit();

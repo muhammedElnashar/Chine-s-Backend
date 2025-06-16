@@ -15,12 +15,12 @@ class DailyExerciseAttemptAnswer extends Model
 
     public function question()
     {
-        return $this->belongsTo(DailyTextQuestion::class, 'question_id');
+        return $this->belongsTo(DailyExerciseQuestion::class, 'question_id');
     }
 
     public function answer()
     {
-        return $this->belongsTo(DailyTextQuestionAnswer::class, 'answer_id');
+        return $this->belongsTo(DailyExerciseQuestionAnswer::class, 'answer_id');
     }
 }
 

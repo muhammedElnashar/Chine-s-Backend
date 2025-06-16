@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_text_questions', function (Blueprint $table) {
+        Schema::create('daily_exercise_questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('daily_exercise_id')->constrained()->onDelete('cascade');
+            $table->foreignId('exercise_id')->constrained('daily_exercises')->onDelete('cascade');
             $table->string('question_type')->default('text'); // text, image, video, audio
             $table->text('question_text')->nullable();
             $table->string('question_media_url')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_text_questions');
+        Schema::dropIfExists('daily_exercise_questions');
     }
 };

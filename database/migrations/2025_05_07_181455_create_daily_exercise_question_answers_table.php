@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_text_question_answers', function (Blueprint $table) {
+        Schema::create('daily_exercise_question_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('daily_text_question_id')->constrained()->onDelete('cascade');
+            $table->foreignId('question_id')->constrained('daily_exercise_questions')->onDelete('cascade');
             $table->string('answer_text');
             $table->boolean('is_correct')->default(false);
             $table->timestamps();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_text_question_answers');
+        Schema::dropIfExists('daily_exercise_question_answers');
     }
 };

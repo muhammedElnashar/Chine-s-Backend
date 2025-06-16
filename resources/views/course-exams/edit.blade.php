@@ -204,16 +204,25 @@
         $(document).on('change', '.question-type-select', function () {
             const index = $(this).data('index');
             const selectedType = $(this).val();
+
             const fileUploadDiv = $('.question-file-upload[data-index="'+index+'"]');
             const textInputDiv = $('.question-text-input[data-index="' + index + '"]');
+            const textInput = textInputDiv.find('input');
+            const fileInput = fileUploadDiv.find('input[type="file"]');
 
-            if(selectedType === 'text'){
+            if (selectedType === 'text') {
                 textInputDiv.show();
                 fileUploadDiv.hide();
-                fileUploadDiv.find('input[type="file"]').val('');
+
+                textInput.prop('required', true);
+                fileInput.prop('required', false).val('');
             } else {
                 textInputDiv.hide();
-                fileUploadDiv.show();            }
+                fileUploadDiv.show();
+
+                textInput.prop('required', false);
+                fileInput.prop('required', true);
+            }
         });
     </script>
 @endpush

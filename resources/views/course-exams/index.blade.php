@@ -39,19 +39,6 @@
                     </div>
                 </div>
                 <div class="card-body pt-0">
-               {{--     <!-- Filter Form -->
-                    <div class="filter-form">
-                        <form method="GET" action="{{ route('courses.levels.exams.index', [$course, $level]) }}">
-                            <input type="text" name="title" placeholder="Search by Title" value="{{ request('title') }}" />
-                            <input type="date" name="date" value="{{ request('date') }}" />
-                            <button type="submit" class="btn btn-primary">
-                                <span class="indicator-label">Filter</span>
-                            </button>
-                            <button type="button" class="btn btn-secondary ms-2"
-                                    onclick="window.location.href='{{ route('courses.levels.exams.index', [$course, $level]) }}'">Clear Filter
-                            </button>
-                        </form>
-                    </div>--}}
 
                     <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                         <thead>
