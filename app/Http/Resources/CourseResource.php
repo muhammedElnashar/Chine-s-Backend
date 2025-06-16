@@ -15,26 +15,18 @@ class CourseResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $isFree = $this->type === 'free';
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'image' => $this->image ? Storage::disk('s3')->url($this->image) : null,
             'type' => $this->type,
-            'price' => $this->is_free ? null : $this->price,
-            'levels' => $this->levels->map(function ($level) {
-                $totalDuration = $level->videos->sum('duration');
-                $videoCount = $level->videos->count();
-
-                return [
-                    'id' => $level->id,
-                    'title' => $level->title,
-                    'description' => $level->description,
-                    'position' => $level->position,
-                    'videos_count' => $videoCount,
-                    'total_duration' => $totalDuration,
-                ];
-            }),
+            'price' => $isFree ? null : $this->price,
+            'levels' => LevelResource::collection($this->whenLoaded('levels')),
+            'course_exam' => new ExamResource($this->exam ),
         ];
     }
+
 }

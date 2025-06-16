@@ -31,7 +31,10 @@
                                     <td>{{ $video->title }}</td>
                                     <td>
                                         @if($video->video_url)
-                                            <a href="{{"https://chines-app-courses.s3.us-east-1.amazonaws.com/". $video->video_url }}" target="_blank" class="link-primary">Watch Video</a>
+                                            <form action="{{ route('admin.videos.presigned', $video->id) }}" method="POST" target="_blank">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-primary">Watch Video</button>
+                                            </form>
                                         @else
                                             No URL
                                         @endif

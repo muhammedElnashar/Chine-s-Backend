@@ -31,4 +31,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/s3/multipart-urls', [VideoController::class, 'getMultipartUploadUrls'])->name('s3.multipart-urls');
     Route::post('/s3/multipart-complete', [VideoController::class, 'completeMultipartUpload'])->name('s3.multipart-complete');
     Route::post('/s3/multipart-abort', [VideoController::class, 'abortMultipartUpload'])->name('s3.multipart-abort');
+    Route::post('/admin/videos/{video}/presigned', [VideoController::class, 'adminPresignedUrl'])->name('admin.videos.presigned');
+
 });

@@ -8,6 +8,8 @@ use App\Http\Resources\ArticleResource;
 use App\Http\Resources\CourseResource;
 use App\Models\Article;
 use App\Models\Course;
+use App\Models\Video;
+use App\Services\VideoService;
 use Illuminate\Http\Request;
 
 class FreeContent extends Controller
@@ -25,7 +27,7 @@ class FreeContent extends Controller
     }
     public function getAllFreeCourses()
     {
-        $freeCourses = Course::with('levels.videos')->where('type', CourseTypeEnum::Free)->paginate(10);
+        $freeCourses = Course::with('levels.videos','levels.exam','levels.files','exam')->where('type', CourseTypeEnum::Free)->paginate(10);
 
         return response()->json([
             'status' => true,
@@ -33,4 +35,6 @@ class FreeContent extends Controller
             'data' => CourseResource::collection($freeCourses),
         ]);
     }
+
+
 }

@@ -19,5 +19,6 @@ class ExamResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'questions' => QuestionResource::collection($this->questions),
-        ];    }
+        ];
+    }
 }

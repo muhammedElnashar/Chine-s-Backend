@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\PaidCoursesController;
 use App\Http\Controllers\Api\ResetPassword;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VideoAccessController;
 use Illuminate\Support\Facades\Route;
 //Auth
 Route::post('register', [AuthController::class, 'register']);
@@ -25,9 +26,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // User
     Route::patch('update/user/profile', [UserController::class, 'updateUserProfile']);
     Route::delete('delete/user/profile', [UserController::class, 'deleteUserProfile']);
+
     Route::get('articles', [FreeContent::class, 'getAllArticles']);
     Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
     Route::get('paid/courses', [PaidCoursesController::class, 'getAllPaidCourses']);
+    Route::get('/videos/{id}/presigned-url', [VideoAccessController::class, 'getPresignedUrl']);
+
     Route::get('daily/questions', [DailyContent::class, 'getDailyTextExercise']);
     Route::get('daily/words', [DailyContent::class, 'getDailyAudioExercise']);
     Route::get('/level/{id}', [LevelController::class, 'getLevelDetails']);

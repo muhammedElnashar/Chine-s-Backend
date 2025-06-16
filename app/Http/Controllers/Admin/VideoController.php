@@ -7,8 +7,10 @@ use App\Http\Requests\StoreVideoRequest;
 use App\Models\Course;
 use App\Models\Level;
 use App\Models\Video;
+use App\Services\VideoService;
 use Illuminate\Http\Request;
 use Aws\S3\S3Client;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -90,7 +92,7 @@ class VideoController extends Controller
     public function destroy(Course $course, Level $level, Video $video)
     {
         // Delete file from S3 if applicable
-        $key = str_replace(config('filesystems.disks.s3.url'), '', $video->video_url);
+        $key = $video->video_url;
 
         try {
             $s3Client = new S3Client([
@@ -108,7 +110,7 @@ class VideoController extends Controller
             ]);
         } catch (\Exception $e) {
             // Log the error but continue with deletion from database
-            \Log::error('Failed to delete video from S3: ' . $e->getMessage());
+            Log::error('Failed to delete video from S3: ' . $e->getMessage());
         }
 
         $video->delete();
@@ -214,7 +216,6 @@ class VideoController extends Controller
                 'message' => 'Upload completed',
                 'location' => $s3Url,
                 'path' => $request->key,
-                'url' => $publicUrl
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -250,5 +251,10 @@ class VideoController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+    public function adminPresignedUrl(Video $video)
+    {
+        $url = VideoService::generatePresignedUrl($video->video_url);
+        return redirect($url);
     }
 }

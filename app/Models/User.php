@@ -65,4 +65,5 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(DailyExerciseAttempt::class, 'student_id');
     }
 
+
 }

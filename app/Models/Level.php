@@ -24,6 +24,6 @@ class Level extends Model
 
     public function exam()
     {
-        return $this->hasOne(Exam::class);
+        return $this->hasOne(Exam::class)->whereNotNull('level_id');
     }
 }

@@ -14,7 +14,7 @@ class PaidCoursesController extends Controller
 {
     public function getAllPaidCourses()
     {
-        $paidCourses = Course::with('levels')->where('type', CourseTypeEnum::Paid)->paginate(10);
+        $paidCourses = Course::with('levels.videos','levels.exam','levels.files','exam')->where('type', CourseTypeEnum::Paid)->paginate(10);
         return response()->json([
             'status' => true,
             'message' => 'Paid Courses List',
