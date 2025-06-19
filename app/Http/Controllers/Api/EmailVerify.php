@@ -9,6 +9,7 @@ use App\Http\Requests\EmailVerifyRequest;
 use App\Mail\EmailVerificationOtp;
 use App\Models\Otp;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class EmailVerify extends Controller
@@ -81,7 +82,11 @@ class EmailVerify extends Controller
                     'attempts' => 0
                 ]
             );
-            Mail::to($user->email)->send(new EmailVerificationOtp($otp));
+            try {
+                Mail::to($user->email)->send(new EmailVerificationOtp($otp));
+            } catch (\Throwable $mailError) {
+                Log::error('Failed Send OTP: ' . $mailError->getMessage());
+            }
             return response()->json(['message' => 'Email Verification OTP sent successfully'], 200);
 
         }catch (\Throwable $e){

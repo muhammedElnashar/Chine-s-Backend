@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\DailyExerciseTypeEnum;
+use App\Models\DailyExercise;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateQuizRequest extends FormRequest
@@ -46,7 +48,17 @@ class UpdateQuizRequest extends FormRequest
                 if (($question['question_type'] ?? null) === 'text' && empty($question['question_text'])) {
                     $validator->errors()->add("questions.$index.question_text", 'The question text is required when type is text.');
                 }
+
+
             }
+            $date = $this->input('exercise_date');
+            if (DailyExercise::where('date', $date)
+                ->where('type', DailyExerciseTypeEnum::Quiz)
+                ->where('id', '!=', $this->route('exercise')->id)
+                ->exists()) {
+                $validator->errors()->add('exercise_date', 'Quiz already exists for this date.');
+            }
+
         });
     }
 

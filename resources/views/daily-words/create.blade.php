@@ -33,7 +33,25 @@
                                     <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                <div class="mb-7">
+                                    <label for="title" class="form-label required">Title</label>
+                                    <input type="text" id="title" name="title"
+                                           class="form-control form-control-solid @error('title') is-invalid @enderror"
+                                           value="{{ old('title') }}" required>
+                                    @error('title')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
 
+                                <div class="mb-7">
+                                    <label for="description" class="form-label">Exam Description </label>
+                                    <textarea id="description" name="description"
+                                              class="form-control form-control-solid @error('description') is-invalid @enderror"
+                                              rows="3">{{ old('description') }}</textarea>
+                                    @error('description')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                                 <div id="words-container">
                                     @for ($i = 0; $i < 2; $i++)
                                         <div class="word-block border rounded p-4 mb-7 position-relative">

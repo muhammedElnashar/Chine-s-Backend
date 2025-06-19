@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+ use App\Enum\StatusEnum;
+ use App\Enum\UserRoleEnum;
  use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
  use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,6 +38,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+    protected $casts = [
+        'type' => UserRoleEnum::class,
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -51,8 +56,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     public function purchasedCourses()
     {
-        return $this->belongsToMany(Course::class, 'user_courses')->withTimestamps()->withPivot('purchased_at');
+        return $this->belongsToMany(Course::class, 'payments')
+            ->withTimestamps()
+            ->withPivot('paid_at', 'status')
+            ->wherePivot('status', StatusEnum::Completed);
     }
+
+    public function hasPurchased($courseId)
+    {
+        return $this->purchasedCourses()->where('course_id', $courseId)->exists();
+    }
+
+
 
 
     public function levelExamAttempts()

@@ -63,7 +63,7 @@
                         <div class="menu-item me-lg-1">
                             <a class="menu-link {{ Request::routeIs('words.index') || Request::routeIs('words.create')  ? 'active' : '' }}  py-3"
                                 href="{{ route('words.create') }}">
-                                <span class="menu-title fs-6">Add Daily Audio Exercise</span>
+                                <span class="menu-title fs-6">Add Daily Audio Word</span>
                             </a>
                         </div>
                         <div class="menu-item me-lg-1">

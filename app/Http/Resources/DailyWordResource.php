@@ -16,6 +16,9 @@ class DailyWordResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'date' => $this->date,
+            'title' => $this->title,
+            'description' => $this->description,
             'word' => WordResource::collection($this->audioWords),
 
         ];

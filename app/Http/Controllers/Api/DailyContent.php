@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enum\DailyExerciseTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DailyQuestionResource;
 use App\Http\Resources\DailyWordResource;
@@ -12,7 +13,9 @@ class DailyContent extends Controller
 {
     public function getDailyTextExercise()
     {
-        $dailyQuestion= DailyExercise::whereDate('date', today())->with('questions.answers')->get();
+        $dailyQuestion= DailyExercise::whereDate('date', today())
+            ->where('type',DailyExerciseTypeEnum::Quiz)
+            ->with('questions.answers')->get();
         return response()->json([
             'status' => true,
             'message' => 'Daily Text Exercise',
@@ -21,10 +24,12 @@ class DailyContent extends Controller
     }
     public function getDailyAudioExercise()
     {
-        $dailyWord= DailyExercise::whereDate('date', today())->with('audioWords')->get();
+        $dailyWord= DailyExercise::whereDate('date', today())
+            ->where('type',DailyExerciseTypeEnum::Audio)
+            ->with('audioWords')->get();
         return response()->json([
             'status' => true,
-            'message' => 'Daily Audio Exercise',
+            'message' => 'Daily Audio Word',
             'data' => DailyWordResource::collection($dailyWord)
         ],200);
     }

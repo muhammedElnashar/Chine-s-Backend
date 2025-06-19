@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enum\CourseTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +15,6 @@ class LevelResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user = $request->user();
 
         return [
             'id' => $this->id,
@@ -24,7 +24,7 @@ class LevelResource extends JsonResource
             'videoCount' => $this->videos->count(),
             'files' => FileResource::collection($this->files),
             'videos' => VideoResource::collection($this->videos),
-            'exam' =>  new ExamResource($this->exam)
+            'exam' => new ExamResource($this->exam),
         ];
     }
 

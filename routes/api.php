@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('articles', [FreeContent::class, 'getAllArticles']);
     Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
     Route::get('paid/courses', [PaidCoursesController::class, 'getAllPaidCourses']);
+    Route::get('paid/courses/{id}', [PaidCoursesController::class, 'getPaidCourse']);
+    Route::get('user/courses', [PaidCoursesController::class, 'userCourseList']);
     Route::get('/videos/{id}/presigned-url', [VideoAccessController::class, 'getPresignedUrl']);
 
     Route::get('daily/questions', [DailyContent::class, 'getDailyTextExercise']);

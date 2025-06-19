@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enum\DailyExerciseTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAudioWordRequest;
 use App\Models\DailyAudioWord;
 use App\Models\DailyExercise;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class DailyAudioWordController extends Controller
@@ -18,9 +19,14 @@ class DailyAudioWordController extends Controller
         $date = request()->input('date');
 
         if ($date) {
-            $exercises = DailyExercise::whereDate('date', $date)->with('audioWords')->paginate(5);
+            $exercises = DailyExercise::whereDate('date', $date)->where('type',DailyExerciseTypeEnum::Audio)
+                ->with('audioWords')
+                ->orderBy('date', 'desc')
+                ->paginate(1);
         } else {
-            $exercises = DailyExercise::whereDate('date', today())->with('audioWords')->paginate(5);
+            $exercises = DailyExercise::where('type',DailyExerciseTypeEnum::Audio)->with('audioWords')
+                ->orderBy('date', 'desc')
+                ->paginate(5);
         }
 
         return view('daily-words.index', compact('exercises'));
@@ -38,18 +44,21 @@ class DailyAudioWordController extends Controller
         try {
             $exercise = DailyExercise::firstOrCreate([
                 'date' => $validated['exercise_date'],
+                'type' => DailyExerciseTypeEnum::Audio,
+                'title' => $validated['title'],
+                'description' => $validated['description'],
             ]);
 
             foreach ($validated['words'] as $word) {
-                $path = $word['audio']->store('audio/dailyWords', 's3');
-
-                Storage::disk('s3')->setVisibility($path, 'public');
-
-                DailyAudioWord::create([
-                    'daily_exercise_id' => $exercise->id,
-                    'audio_file' => $path,
-                    'word_meaning' => $word['meaning'],
-                ]);
+                if (isset($word['audio']) && $word['audio']->isValid()) {
+                    $path = $word['audio']->storePublicly('dailyWords', 's3');
+                    DailyAudioWord::create([
+                        'exercise_id' => $exercise->id,
+                        'audio_file' => $path,
+                        'word_meaning' => $word['meaning'],
+                        'created_at'=> now(),
+                    ]);
+                }
             }
 
 
@@ -58,19 +67,21 @@ class DailyAudioWordController extends Controller
             return redirect()->route('words.index')->with('success', 'Audio words have been saved successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'error While Savsing' . $e->getMessage()]);
+            Log::error('Error saving audio words: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'error While Saving' ]);
         }
     }
 
-    public function destroy($id)
+    public function destroy(DailyExercise $word)
     {
-        $exercise = DailyExercise::findOrFail($id);
-
-        $exercise->audioWords()->delete();
-
-        if (!$exercise->questions()->exists()) {
-            $exercise->delete();
+        foreach ($word->audioWords as $file) {
+            if ($file->audio_file) {
+                Storage::disk('s3')->delete($file->audio_file);
+            }
         }
+        $word->audioWords()->delete();
+        $word->delete();
+
         return redirect()->route('words.index')->with('success', 'Exercise and its Audio have been deleted successfully.');
     }
 

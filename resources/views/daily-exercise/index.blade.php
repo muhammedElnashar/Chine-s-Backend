@@ -41,7 +41,6 @@
                          <!-- Filter Form -->
                          <div class="filter-form">
                              <form method="GET" action="{{ route('exercises.index') }}">
-                                 <input type="text" name="title" placeholder="Search by Title" value="{{ request('title') }}" />
                                  <input type="date" name="date" value="{{ request('date') }}" />
                                  <button type="submit" class="btn btn-primary">
                                      <span class="indicator-label">Filter</span>

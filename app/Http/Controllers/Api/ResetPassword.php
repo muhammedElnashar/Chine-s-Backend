@@ -13,6 +13,7 @@ use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ResetPassword extends Controller
@@ -35,7 +36,11 @@ class ResetPassword extends Controller
                     'attempts' => 0
                 ]
             );
-            Mail::to($user->email)->send(new ResetPasswordOtp($otp));
+            try {
+                Mail::to($user->email)->send(new ResetPasswordOtp($otp));
+            } catch (\Throwable $mailError) {
+                Log::error('Failed Send OTP: ' . $mailError->getMessage());
+            }
             return response()->json(['message' => 'Reset Password OTP sent successfully'], 200);
         } catch (\Throwable $e) {
             return ErrorHandler::handle($e);

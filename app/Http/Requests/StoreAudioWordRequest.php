@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\DailyExerciseTypeEnum;
 use App\Models\DailyExercise;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,6 +25,8 @@ class StoreAudioWordRequest extends FormRequest
     {
         return [
             'exercise_date' => 'required|date',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'words' => 'required|array|min:2',
             'words.*.audio' => 'required|file|mimes:mp3,wav',
             'words.*.meaning' => 'required|string|max:255',
@@ -34,12 +37,10 @@ class StoreAudioWordRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $date = $this->input('exercise_date');
-
-            $exercise = DailyExercise::where('date', $date)->first();
-
-            if ($exercise && $exercise->audioWords()->exists()) {
-                $validator->errors()->add('exercise_date', 'Audio Exercise already exists for this date.');
+            if (DailyExercise::where('date', $date)->where('type', DailyExerciseTypeEnum::Audio)->exists()) {
+                $validator->errors()->add('exercise_date', 'Audio already exists for this date.');
             }
+
 
         });
     }

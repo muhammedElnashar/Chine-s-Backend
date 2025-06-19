@@ -129,7 +129,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title fs-5">Daily Audio Exercises</span>
+                        <span class="menu-title fs-5">Daily Audio Words</span>
                     </a>
                 </div>
                 <div class="menu-item">

@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use App\Enum\CourseTypeEnum;
+use App\Enum\MethodEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
     protected $fillable = ['title', 'description', 'type', 'image','price'];
+    protected $casts = [
+        'type' => CourseTypeEnum::class,
+        'method' => MethodEnum::class,
+    ];
+
     public function levels()
     {
         return $this->hasMany(Level::class);
