@@ -52,7 +52,7 @@ class PaidCoursesController extends Controller
     public function userCourseList()
     {
         $user= auth()->user();
-        $courses = $user->purchasedCourses()->with('levels.videos', 'levels.exam', 'levels.files', 'exam')->get();
+        $courses = $user->purchasedCourses()->with('levels.videos.views', 'levels.exam', 'levels.files', 'exam')->get();
         return response()->json([
             'status' => true,
             'message' => 'User Purchased Courses List',

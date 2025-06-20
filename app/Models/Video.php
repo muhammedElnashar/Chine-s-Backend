@@ -12,4 +12,9 @@ class Video extends Model
     {
         return $this->belongsTo(Level::class);
     }
+    public function views()
+    {
+        return $this->hasMany(VideoViews::class);
+    }
+
 }

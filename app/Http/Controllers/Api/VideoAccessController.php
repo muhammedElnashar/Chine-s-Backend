@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Video;
+use App\Models\VideoViews;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class VideoAccessController extends Controller
 {
@@ -27,4 +31,75 @@ class VideoAccessController extends Controller
             ],
         ]);
     }
+    public function markVideoAsWatched(Request $request)
+    {
+        $request->validate([
+            "video_id" => [
+                'required',
+                Rule::exists(Video::class, 'id'),
+            ],
+        ]);
+
+        $userId = auth()->id();
+        $videoId = $request->input('video_id');
+
+        $existingView = VideoViews::where('user_id', $userId)
+            ->where('video_id', $videoId)
+            ->first();
+
+        if (!$existingView) {
+            VideoViews::create([
+                'user_id' => $userId,
+                'video_id' => $videoId,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Video marked as watched.',
+        ]);
+    }
+    public function getWatchedVideosCountByPlaylist()
+    {
+        $userId = Auth::id();
+
+        $courses = Course::whereHas('playlist.videos.videoViews', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+            ->with(['playlist' => function ($query) use ($userId) {
+                $query->withCount([
+                    'videos',
+                    'videos as watched_count' => function ($videoQuery) use ($userId) {
+                        $videoQuery->whereHas('videoViews', function ($viewQuery) use ($userId) {
+                            $viewQuery->where('user_id', $userId);
+                        });
+                    }
+                ]);
+            }])->get();
+
+        $filteredCourses = $courses->map(function ($course) {
+            $playlist = $course->playlist;
+            $isCompleted = $playlist && $playlist->watched_count === $playlist->videos_count;
+
+            return [
+                'id' => $course->id,
+                'title' => $course->title,
+                'description' => $course->description,
+                'playlist' => $playlist ? [
+                    'thumbnail_url' => $playlist->thumbnail_url,
+                    'duration' => $playlist->duration,
+                    'videos_count' => $playlist->videos_count,
+                    'watched_count' => $playlist->watched_count,
+                    'is_completed' => $isCompleted,
+                ] : null,
+            ];
+        });
+
+        return response()->json([
+            'courses' => $filteredCourses,
+        ]);
+    }
+
+
+
 }
