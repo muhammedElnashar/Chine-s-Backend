@@ -11,25 +11,36 @@ use Illuminate\Http\Request;
 
 class DailyContent extends Controller
 {
-    public function getDailyTextExercise()
+    public function getDailyTextExercise(Request $request)
     {
-        $dailyQuestion= DailyExercise::whereDate('date', today())
-            ->where('type',DailyExerciseTypeEnum::Quiz)
-            ->with('questions.answers')->get();
+        $request->validate([
+            'date' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        $date = $request->input('date') ?? now()->toDateString();
+        $dailyQuestions = DailyExercise::whereDate('date', $date)
+            ->where('type', DailyExerciseTypeEnum::Quiz)
+            ->with('questions.answers')
+            ->get();
         return response()->json([
             'status' => true,
-            'message' => 'Daily Text Exercise',
-            'data' => DailyQuestionResource::collection($dailyQuestion)
+            'message' => 'Daily Text Exercise for ' . $date,
+            'data' => DailyQuestionResource::collection($dailyQuestions)
         ],200);
     }
-    public function getDailyAudioExercise()
+    public function getDailyAudioExercise(Request $request)
     {
-        $dailyWord= DailyExercise::whereDate('date', today())
+        $request->validate([
+            'date' => 'nullable|date_format:Y-m-d',
+        ]);
+        $date = $request->input('date') ?? now()->toDateString();
+
+        $dailyWord= DailyExercise::whereDate('date', $date)
             ->where('type',DailyExerciseTypeEnum::Audio)
             ->with('audioWords')->get();
         return response()->json([
             'status' => true,
-            'message' => 'Daily Audio Word',
+            'message' => 'Daily Audio Word  for ' . $date,
             'data' => DailyWordResource::collection($dailyWord)
         ],200);
     }

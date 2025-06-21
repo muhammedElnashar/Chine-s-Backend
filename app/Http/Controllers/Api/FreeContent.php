@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enum\CourseTypeEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AllPaidCourseResource;
+use App\Http\Resources\AllCourseResource;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\CourseResource;
 use App\Models\Article;
@@ -33,7 +33,7 @@ class FreeContent extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Free Courses List',
-            'data' => AllPaidCourseResource::collection($freeCourses),
+            'data' => AllCourseResource::collection($freeCourses),
         ]);
     }
 

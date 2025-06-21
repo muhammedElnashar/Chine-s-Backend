@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enum\CourseTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,7 @@ class CourseResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $isFree = $this->type === 'free';
+        $isFree = $this->type === CourseTypeEnum::Free;
 
         return [
             'id' => $this->id,

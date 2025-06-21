@@ -48,6 +48,15 @@
                                 <span class="menu-title fs-6">Dashboard</span>
                             </a>
                         </div>
+                            @if(auth()->user()->isSuperAdmin())
+                            <div class="menu-item me-lg-1">
+                                <a class="menu-link {{ Request::routeIs('users.index') || Request::routeIs('users.create') || Request::routeIs('users.edit') ? 'active' : '' }}  py-3"
+                                   href="{{ route('users.create') }}">
+                                    <span class="menu-title fs-6">Add Admin</span>
+                                </a>
+                            </div>
+                            @endif
+
                         <div class="menu-item me-lg-1">
                             <a class="menu-link {{ Request::routeIs('articles.index') || Request::routeIs('articles.create') || Request::routeIs('articles.edit') ? 'active' : '' }}  py-3"
                                 href="{{ route('articles.create') }}">
@@ -120,7 +129,13 @@
                         <!--begin::Menu wrapper-->
                         <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                             data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-                            <img src="{{ asset('assets/media/avatars/150-26.jpg') }}" alt="user" />
+                            @if(\Illuminate\Support\Facades\Auth::user()->image)
+                                <img alt="Logo"
+                                     src="{{ \Illuminate\Support\Facades\Storage::disk('s3')->url(\Illuminate\Support\Facades\Auth::user()->image) }}" />
+                            @else
+
+                                <img src="{{ asset('assets/media/avatars/150-26.jpg') }}" alt="user" />
+                            @endif
                         </div>
                         <!--begin::Menu-->
                         <div class="py-4 menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold fs-6 w-275px"
@@ -130,7 +145,12 @@
                                 <div class="px-3 menu-content d-flex align-items-center">
                                     <!--begin::Avatar-->
                                     <div class="symbol symbol-50px me-5">
-                                        <img alt="Logo" src="{{ asset('assets/media/avatars/150-26.jpg') }}" />
+                                        @if(\Illuminate\Support\Facades\Auth::user()->image)
+                                            <img alt="Logo"
+                                                 src="{{ \Illuminate\Support\Facades\Storage::disk('s3')->url(\Illuminate\Support\Facades\Auth::user()->image) }}" />
+                                        @else
+                                            <img alt="Logo" src="{{ asset('assets/media/avatars/150-26.jpg') }}" />
+                                        @endif
                                     </div>
                                     <!--end::Avatar-->
                                     <!--begin::Username-->

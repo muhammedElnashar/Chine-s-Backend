@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CourseExamController;
 use App\Http\Controllers\Admin\CoursesController;
@@ -19,8 +20,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin_access'])->group(function () {
+    Route::get('/home', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
+
+    Route::resource('users', AdminController::class);
     Route::resource('articles', ArticleController::class);
     Route::resource('daily/exercises', DailyQuestion::class);
     Route::resource('daily/words', DailyAudioWordController::class);

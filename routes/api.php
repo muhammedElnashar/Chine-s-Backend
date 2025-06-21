@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\PaidCoursesController;
 use App\Http\Controllers\Api\ResetPassword;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserCourseController;
 use App\Http\Controllers\Api\VideoAccessController;
 use Illuminate\Support\Facades\Route;
 //Auth
@@ -30,8 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('articles', [FreeContent::class, 'getAllArticles']);
     Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
     Route::get('paid/courses', [PaidCoursesController::class, 'getAllPaidCourses']);
-    Route::get('paid/courses/{id}', [PaidCoursesController::class, 'getPaidCourse']);
-    Route::get('user/courses', [PaidCoursesController::class, 'userCourseList']);
+    Route::get('courses/{id}', [UserCourseController::class, 'getCourseDetails'])
+        ->middleware('is_verify_payment');
+    Route::get('user/courses', [UserCourseController::class, 'userCourseList']);
     Route::get('/videos/{id}/presigned-url', [VideoAccessController::class, 'getPresignedUrl']);
     Route::post('/mark/video', [VideoAccessController::class, 'markVideoAsWatched']);
 
