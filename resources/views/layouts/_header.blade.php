@@ -64,6 +64,12 @@
                             </a>
                         </div>
                         <div class="menu-item me-lg-1">
+                            <a class="menu-link {{ Request::routeIs('announcements.index') || Request::routeIs('announcements.create') || Request::routeIs('announcements.edit') ? 'active' : '' }}  py-3"
+                                href="{{ route('announcements.create') }}">
+                                <span class="menu-title fs-6">Add Announcement</span>
+                            </a>
+                        </div>
+                        <div class="menu-item me-lg-1">
                             <a class="menu-link {{ Request::routeIs('exercises.index') || Request::routeIs('exercises.create')|| Request::routeIs('exercises.edit')|| Request::routeIs('exercises.show')  ? 'active' : '' }}  py-3"
                                 href="{{ route('exercises.create') }}">
                                 <span class="menu-title fs-6">Add Daily Quiz</span>
