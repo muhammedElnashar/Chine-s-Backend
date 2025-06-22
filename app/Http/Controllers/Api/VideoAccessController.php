@@ -59,46 +59,6 @@ class VideoAccessController extends Controller
             'message' => 'Video marked as watched.',
         ]);
     }
-    public function getWatchedVideosCountByPlaylist()
-    {
-        $userId = Auth::id();
-
-        $courses = Course::whereHas('playlist.videos.videoViews', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })
-            ->with(['playlist' => function ($query) use ($userId) {
-                $query->withCount([
-                    'videos',
-                    'videos as watched_count' => function ($videoQuery) use ($userId) {
-                        $videoQuery->whereHas('videoViews', function ($viewQuery) use ($userId) {
-                            $viewQuery->where('user_id', $userId);
-                        });
-                    }
-                ]);
-            }])->get();
-
-        $filteredCourses = $courses->map(function ($course) {
-            $playlist = $course->playlist;
-            $isCompleted = $playlist && $playlist->watched_count === $playlist->videos_count;
-
-            return [
-                'id' => $course->id,
-                'title' => $course->title,
-                'description' => $course->description,
-                'playlist' => $playlist ? [
-                    'thumbnail_url' => $playlist->thumbnail_url,
-                    'duration' => $playlist->duration,
-                    'videos_count' => $playlist->videos_count,
-                    'watched_count' => $playlist->watched_count,
-                    'is_completed' => $isCompleted,
-                ] : null,
-            ];
-        });
-
-        return response()->json([
-            'courses' => $filteredCourses,
-        ]);
-    }
 
 
 

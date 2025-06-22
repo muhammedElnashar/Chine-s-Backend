@@ -6,7 +6,9 @@ use App\Enum\CourseTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllCourseResource;
 use App\Http\Resources\CourseResource;
+use App\Http\Resources\SectionDetailsResource;
 use App\Models\Course;
+use App\Models\Level;
 use Illuminate\Http\Request;
 
 class UserCourseController extends Controller
@@ -18,7 +20,7 @@ class UserCourseController extends Controller
         $user = auth()->user();
 
         if ($course->type === CourseTypeEnum::Free || $user->hasPurchased($course->id)) {
-            $course->load('levels.videos', 'levels.exam', 'levels.files', 'exam');
+            $course->load('levels');
             return response()->json([
                 'status' => true,
                 'message' => 'Course Details',
@@ -32,14 +34,40 @@ class UserCourseController extends Controller
         ], 403);
     }
 
+    public function getSectionDetails($id)
+    {
+        $section = Level::with('videos', 'files', 'exam', 'course')->find($id);
+        if (!$section) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Section not found',
+            ], 404);
+        }
+        $user = auth()->user();
+
+        $course = $section->course;
+        if ($course->type->value === CourseTypeEnum::Free->value || $user->hasPurchased($course->id)) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Section Details',
+                'data' => new SectionDetailsResource($section),
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized access to section',
+        ], 403);
+    }
+
     public function userCourseList()
     {
         $user= auth()->user();
-        $courses = $user->purchasedCourses()->with('levels.videos.views', 'levels.exam', 'levels.files', 'exam')->get();
+        $courses = $user->purchasedCourses()->with('levels')->get();
         return response()->json([
             'status' => true,
             'message' => 'User Purchased Courses List',
-            'data' => AllCourseResource::collection($courses),
+            'data' => CourseResource::collection($courses),
         ]);
     }
 }

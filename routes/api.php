@@ -3,7 +3,8 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DailyContent;
 use App\Http\Controllers\Api\EmailVerify;
-use App\Http\Controllers\Api\FreeContent;
+use App\Http\Controllers\Api\ExamController;
+use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\PaidCoursesController;
 use App\Http\Controllers\Api\ResetPassword;
@@ -27,19 +28,29 @@ Route::middleware('auth:sanctum')->group(function () {
     // User
     Route::patch('update/user/profile', [UserController::class, 'updateUserProfile']);
     Route::delete('delete/user/profile', [UserController::class, 'deleteUserProfile']);
-
-    Route::get('articles', [FreeContent::class, 'getAllArticles']);
-    Route::get('announcements', [FreeContent::class, 'getAllAnnouncements']);
-    Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
-    Route::get('paid/courses', [PaidCoursesController::class, 'getAllPaidCourses']);
-    Route::get('courses/{id}', [UserCourseController::class, 'getCourseDetails'])
-        ->middleware('is_verify_payment');
+    //Articles, Announcements
+    Route::get('articles', [CourseController::class, 'getAllArticles']);
+    Route::get('announcements', [CourseController::class, 'getAllAnnouncements']);
+    //Courses
+    Route::get('free/courses', [CourseController::class, 'getAllFreeCourses']);
+    Route::get('paid/courses', [CourseController::class, 'getAllPaidCourses']);
+    Route::get('courses/{id}', [UserCourseController::class, 'getCourseDetails']);
     Route::get('user/courses', [UserCourseController::class, 'userCourseList']);
+    //Courses and Sections Exams
+    Route::get('/exams/{id}', [ExamController::class, 'show']);
+    Route::post('/exams/submit', [ExamController::class, 'submit']);
+    //Sections and Videos
+    Route::get('sections/{id}', [UserCourseController::class, 'getSectionDetails']);
     Route::get('/videos/{id}/presigned-url', [VideoAccessController::class, 'getPresignedUrl']);
     Route::post('/mark/video', [VideoAccessController::class, 'markVideoAsWatched']);
-
+    //Daily Content
     Route::get('daily/questions', [DailyContent::class, 'getDailyTextExercise']);
     Route::get('daily/words', [DailyContent::class, 'getDailyAudioExercise']);
-    Route::get('/level/{id}', [LevelController::class, 'getLevelDetails']);
+    // Daily Exams
+    Route::get('/daily/exams/{id}', [DailyContent::class, 'ShowDailyExercise']);
+    Route::post('/daily/exams/submit', [DailyContent::class, 'submitDailyQuiz']);
+
+
+
 
 });

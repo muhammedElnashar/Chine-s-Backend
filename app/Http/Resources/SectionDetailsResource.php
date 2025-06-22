@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Enum\CourseTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
-class LevelResource extends JsonResource
+class SectionDetailsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -28,7 +27,9 @@ class LevelResource extends JsonResource
             'totalDuration' => $this->videos->sum('duration'),
             'videoCount' => $this->videos->count(),
             'VideoHasWatched'=> $watchedCount,
-
+            'files' => FileResource::collection($this->files),
+            'videos' => VideoResource::collection($this->videos),
+            'exam' => new LevelExamResource($this->exam),
         ];
     }
 

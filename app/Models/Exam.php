@@ -24,4 +24,10 @@ class Exam extends Model
     {
         return $this->hasMany(ExamAttempt::class);
     }
+    public function studentAttempt()
+    {
+        return $this->hasOne(ExamAttempt::class)->where('student_id', auth()->id());
+    }
+
 }
+

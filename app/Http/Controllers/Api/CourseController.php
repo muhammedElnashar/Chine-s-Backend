@@ -15,7 +15,7 @@ use App\Models\Video;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
 
-class FreeContent extends Controller
+class CourseController extends Controller
 {
     public function getAllArticles()
     {
@@ -28,16 +28,6 @@ class FreeContent extends Controller
           'data'=>  ArticleResource::collection($articles),
         ],200);
     }
-    public function getAllFreeCourses()
-    {
-        $freeCourses = Course::with('levels.videos','levels.exam','levels.files','exam')->where('type', CourseTypeEnum::Free)->paginate(10);
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Free Courses List',
-            'data' => AllCourseResource::collection($freeCourses),
-        ]);
-    }
 
     public function getAllAnnouncements()
     {
@@ -46,6 +36,26 @@ class FreeContent extends Controller
             'status' => true,
             'message' => 'AnnouncementsResource List',
             'data' => AnnouncementsResource::collection($announcements),
+        ]);
+    }
+
+    public function getAllFreeCourses()
+    {
+        $freeCourses = Course::with('levels')->where('type', CourseTypeEnum::Free)->paginate(10);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Free Courses List',
+            'data' => CourseResource::collection($freeCourses),
+        ]);
+    }
+    public function getAllPaidCourses()
+    {
+        $paidCourses = Course::with('levels')->where('type', CourseTypeEnum::Paid)->paginate(10);
+        return response()->json([
+            'status' => true,
+            'message' => 'Paid Courses List',
+            'data' => CourseResource::collection($paidCourses),
         ]);
     }
 

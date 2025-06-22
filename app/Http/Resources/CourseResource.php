@@ -26,7 +26,7 @@ class CourseResource extends JsonResource
             'type' => $this->type,
             'price' => $isFree ? null : $this->price,
             'section' => LevelResource::collection($this->whenLoaded('levels')),
-            'course_exam' => new ExamResource($this->exam) ,
+            'course_exam' => new LevelExamResource($this->exam) ,
 
         ];
     }

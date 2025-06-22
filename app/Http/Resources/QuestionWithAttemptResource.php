@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class QuestionResource extends JsonResource
+class QuestionWithAttemptResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,6 +15,7 @@ class QuestionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $studentAnswer = $this->studentAnswer;
 
         return [
             'id' => $this->id,
@@ -22,7 +23,10 @@ class QuestionResource extends JsonResource
             'content' => $this->question_type === 'text'
                 ? $this->question_text
                 : Storage::disk('s3')->url($this->question_media_url),
-            'answers' => AnswerResource::collection($this->answers),
+            'explanation' => $this->explanation,
+            'student_answer_id' => $studentAnswer?->answer_id,
+            'student_correct' => (bool) $studentAnswer?->is_correct,
+            'answers' => AnswerWithAttemptCollection::make($this->answers)->withStudentAnswer($studentAnswer),
         ];
     }
 }

@@ -2,32 +2,26 @@
 
 namespace App\Http\Resources;
 
-use App\Enum\CourseTypeEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
-class AllCourseResource extends JsonResource
+class ExamAttemptResource extends JsonResource
 {
-
     /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
-
     public function toArray(Request $request): array
     {
-        $isFree = $this->type === CourseTypeEnum::Free;
-
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'image' => $this->image ? Storage::disk('s3')->url($this->image) : null,
-            'type' => $this->type,
-            'price' => $isFree ? null : $this->price,
-            'section' => AllLevelResource::collection($this->whenLoaded('levels')),
+            'student_score' => $this->score,
+            'total_score' => $this->questions->count(), // ← عدد الأسئلة
+            'questions' => new ExamAttemptQuestionCollection($this->questions, $this->studentAnswers),
         ];
+
     }
 }

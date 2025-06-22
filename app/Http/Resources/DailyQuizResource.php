@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AllLevelResource extends JsonResource
+class DailyQuizResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,10 @@ class AllLevelResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'date' => $this->date,
+            'type' => $this->type,
             'title' => $this->title,
-            'position' => $this->position,
-            'totalDuration' => $this->videos->sum('duration'),
-            'videoCount' => $this->videos->count(),
+            'description' => $this->description,
         ];
     }
 }
