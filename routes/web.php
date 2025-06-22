@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AnnouncementController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CourseExamController;
 use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\DailyAudioWordController;
 use App\Http\Controllers\Admin\DailyQuestion;
+use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\LevelFileController;
@@ -21,10 +23,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::middleware(['auth', 'admin_access'])->group(function () {
-    Route::get('/home', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::resource('users', AdminController::class);
     Route::resource('articles', ArticleController::class);
+    Route::resource('announcements', AnnouncementController::class);
     Route::resource('daily/exercises', DailyQuestion::class);
     Route::resource('daily/words', DailyAudioWordController::class);
     Route::resource('courses', CoursesController::class);

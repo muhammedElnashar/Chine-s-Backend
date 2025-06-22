@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Enum\CourseTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllCourseResource;
+use App\Http\Resources\AnnouncementsResource;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\CourseResource;
+use App\Models\Announcement;
 use App\Models\Article;
 use App\Models\Course;
 use App\Models\Video;
@@ -34,6 +36,16 @@ class FreeContent extends Controller
             'status' => true,
             'message' => 'Free Courses List',
             'data' => AllCourseResource::collection($freeCourses),
+        ]);
+    }
+
+    public function getAllAnnouncements()
+    {
+        $announcements = Announcement::all();
+        return response()->json([
+            'status' => true,
+            'message' => 'AnnouncementsResource List',
+            'data' => AnnouncementsResource::collection($announcements),
         ]);
     }
 

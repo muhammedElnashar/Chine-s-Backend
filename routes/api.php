@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('delete/user/profile', [UserController::class, 'deleteUserProfile']);
 
     Route::get('articles', [FreeContent::class, 'getAllArticles']);
+    Route::get('announcements', [FreeContent::class, 'getAllAnnouncements']);
     Route::get('free/courses', [FreeContent::class, 'getAllFreeCourses']);
     Route::get('paid/courses', [PaidCoursesController::class, 'getAllPaidCourses']);
     Route::get('courses/{id}', [UserCourseController::class, 'getCourseDetails'])
