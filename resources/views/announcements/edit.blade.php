@@ -80,7 +80,7 @@
                                 </div>
                                 <div class="fv-row mb-7">
                                     <label class="fs-6 fw-semibold form-label mb-2 ">
-                                        <span class="required">Url</span>
+                                        <span class="">Url</span>
                                         <span>
                                             @error('url')<small class="text-danger">{{ $message }}</small>@enderror
                                         </span>
