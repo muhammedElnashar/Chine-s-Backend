@@ -36,7 +36,7 @@ class LevelFileController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:2048',
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,mp3,wav|max:10240',
         ]);
         $filePath = $request->file('file')->storePublicly('level_files', 's3');
         $level->files()->create([

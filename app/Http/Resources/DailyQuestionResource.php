@@ -19,7 +19,7 @@ class DailyQuestionResource extends JsonResource
             'date' => $this->date,
             'title' => $this->title,
             'description' => $this->description,
-            'question_text' => QuestionResource::collection($this->questions),
+            'questions' => QuestionResource::collection($this->questions),
         ];
     }
 }

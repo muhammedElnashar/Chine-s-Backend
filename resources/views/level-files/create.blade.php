@@ -19,14 +19,14 @@
                         <div id="videos-container">
                             <div class="video-item mb-6" data-index="0">
                                 <label class="form-label required">Name</label>
-                                <input type="text" name="name" class="form-control "
+                                <input type="text" name="name" value="{{old('name')}}" class="form-control "
                                        placeholder="Enter File Name" >
                                 @error('name')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror
 
                                 <label class="form-label mt-3">Upload File</label>
-                                <input type="file" name="file" class="form-control " >
+                                <input type="file" name="file"  class="form-control " >
                                 @error('file')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                                 @enderror

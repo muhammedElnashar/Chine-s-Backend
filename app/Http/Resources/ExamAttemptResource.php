@@ -19,7 +19,7 @@ class ExamAttemptResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'student_score' => $this->score,
-            'total_score' => $this->questions->count(), // ← عدد الأسئلة
+            'total_score' => $this->questions->count(),
             'questions' => new ExamAttemptQuestionCollection($this->questions, $this->studentAnswers),
         ];
 

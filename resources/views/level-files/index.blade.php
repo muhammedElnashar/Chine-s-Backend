@@ -21,7 +21,7 @@
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th>name</th>
                                 <th>File Url</th>
-                                <th class="text-end pe-4">Actions</th>
+                                <th class="text-center">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
