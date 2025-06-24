@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Enum\CourseTypeEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AllCourseResource;
 use App\Http\Resources\CourseResource;
 use App\Http\Resources\SectionDetailsResource;
 use App\Models\Course;
 use App\Models\Level;
-use Illuminate\Http\Request;
 
 class UserCourseController extends Controller
 {
@@ -63,7 +61,7 @@ class UserCourseController extends Controller
     public function userCourseList()
     {
         $user= auth()->user();
-        $courses = $user->purchasedCourses()->with('levels')->get();
+        $courses = $user->courses()->with('levels')->get();
         return response()->json([
             'status' => true,
             'message' => 'User Purchased Courses List',

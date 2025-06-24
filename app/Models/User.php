@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  use Illuminate\Database\Eloquent\SoftDeletes;
  use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+ use Illuminate\Support\Carbon;
+ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -83,5 +84,23 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(DailyExerciseAttempt::class, 'student_id');
     }
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'user_courses')
+            ->withTimestamps()
+            ->withPivot('purchased_at');
+    }
+    public function subscribeToCourse(int $courseId, ?Carbon $purchasedAt = null): bool
+    {
+        if ($this->courses()->where('course_id', $courseId)->exists()) {
+            return false;
+        }
+
+        $this->courses()->attach($courseId, [
+            'purchased_at' => $purchasedAt ?? now(),
+        ]);
+
+        return true;
+    }
 
 }

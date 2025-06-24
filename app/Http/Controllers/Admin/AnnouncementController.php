@@ -35,6 +35,7 @@ class AnnouncementController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'url'=> 'nullable|url|max:255',
         ]);
         if ($request->hasFile('image')) {
             $path = $request->file('image')->storePublicly('images/announcement', 's3');
@@ -69,6 +70,7 @@ class AnnouncementController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'url'=> 'nullable|url|max:255',
         ]);
 
         if ($request->hasFile('image')) {

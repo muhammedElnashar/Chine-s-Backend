@@ -45,6 +45,7 @@ class DailyQuestion extends Controller
     public function store(StoreQuizRequest $request)
     {
         $data = $request->validated();
+        $now = now();
         DB::beginTransaction();
         try {
             $exercise = DailyExercise::create([
@@ -61,20 +62,24 @@ class DailyQuestion extends Controller
                 $questionId = DailyExerciseQuestion::insertGetId([
                     'exercise_id' => $exercise->id,
                     'question_type' => $question['question_type'],
-                    'question_text' => $question['question_type'] === 'text' ? $question['question_text'] : null,
+                    'question_text' => $question['question_text'],
                     'question_media_url' => $mediaUrl,
                     'explanation' => $question['explanation'] ?? null,
-                    'created_at' => now(),
-                ]);
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                    ]);
+                $answers = [];
                 foreach ($question['answers'] as $index => $answer) {
-                    DailyExerciseQuestionAnswer::insert([
+                    $answers[] = [
                         'question_id' => $questionId,
                         'answer_text' => $answer,
                         'is_correct' => ($index == $question['correct_answer']),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
                 }
+
+                DailyExerciseQuestionAnswer::insert($answers);
             }
             DB::commit();
             return redirect()->route('exercises.index')->with('success', 'Exam created successfully.');
@@ -130,7 +135,7 @@ class DailyQuestion extends Controller
             foreach ($data['questions'] as $qIndex => $questionData) {
                 $type = $questionData['question_type'] ?? 'text';
                 $mediaPath = null;
-                $questionText = $type === 'text' ? $questionData['question_text'] : null;
+                $questionText = $questionData['question_text'];
 
                 if (!empty($questionData['id'])) {
                     // تعديل سؤال موجود

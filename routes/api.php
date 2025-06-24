@@ -36,6 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('paid/courses', [CourseController::class, 'getAllPaidCourses']);
     Route::get('courses/{id}', [UserCourseController::class, 'getCourseDetails']);
     Route::get('user/courses', [UserCourseController::class, 'userCourseList']);
+    Route::post('subscribe/free/course', [CourseController::class, 'subscribeFreeCourse']);
     //Courses and Sections Exams
     Route::get('/exams/{id}', [ExamController::class, 'show']);
     Route::post('/exams/submit', [ExamController::class, 'submit']);

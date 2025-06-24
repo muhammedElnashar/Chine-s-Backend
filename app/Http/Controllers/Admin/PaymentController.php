@@ -11,6 +11,7 @@ use App\Models\Course;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -47,8 +48,15 @@ class PaymentController extends Controller
        $data['payment_method']= MethodEnum::Manual;
        $data['paid_at']=now();
 
-        Payment::create($data);
+        if (Payment::where('user_id', $data['user_id'])->where('course_id', $data['course_id'])->exists()) {
+            return redirect()->back()->with('error','This user already paid for this course.');
+        }
 
+        DB::transaction(function () use ($data) {
+            Payment::create($data);
+            $user = User::findOrFail($data['user_id']);
+            $user->subscribeToCourse($data['course_id'], $data['paid_at']);
+        });
         return redirect()->route('payments.index')->with('success', 'Payment created successfully.');
     }
 
@@ -73,24 +81,52 @@ class PaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,Payment $payment)
+    public function update(Request $request, Payment $payment)
     {
-        $data=$request->validate([
-            'user_id' => 'required|exists:users,id',
+        $data = $request->validate([
+            'user_id'   => 'required|exists:users,id',
             'course_id' => 'required|exists:courses,id',
-            'amount' => 'required|numeric|min:0',
+            'amount'    => 'required|numeric|min:0',
         ]);
-        $data['paid_at']=now();
-        $payment->update($data);
-        return redirect()->route('payments.index')->with('success', 'Payment updated successfully.');
+
+        $data['paid_at'] = now();
+
+        DB::transaction(function () use ($payment, $data) {
+
+            $originalUserId = $payment->user_id;
+            $originalCourseId = $payment->course_id;
+
+            $payment->update($data);
+
+            if ($originalUserId != $data['user_id'] || $originalCourseId != $data['course_id']) {
+
+                $oldUser = User::find($originalUserId);
+                if ($oldUser) {
+                    $oldUser->courses()->detach($originalCourseId);
+                }
+                $newUser = User::findOrFail($data['user_id']);
+                $newUser->subscribeToCourse($data['course_id'], $data['paid_at']);
+            }
+        });
+
+        return redirect()->route('payments.index')->with('success', 'Payment Update Successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Payment $payment)
     {
-        $payment->delete();
+        DB::transaction(function () use ($payment) {
+            $user = User::find($payment->user_id);
+
+            if ($user) {
+                $user->courses()->detach($payment->course_id);
+            }
+
+            $payment->delete();
+        });
         return redirect()->route('payments.index')->with('success', 'Payment deleted successfully.');
     }
 }

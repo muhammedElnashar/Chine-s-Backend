@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Enum\CourseTypeEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AllCourseResource;
 use App\Http\Resources\AnnouncementsResource;
 use App\Http\Resources\ArticleResource;
 use App\Http\Resources\CourseResource;
@@ -38,10 +37,33 @@ class CourseController extends Controller
             'data' => AnnouncementsResource::collection($announcements),
         ]);
     }
+    public function subscribeFreeCourse(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+        ]);
+
+        $user = auth()->user();
+        $course = Course::find($request->course_id);
+        if (!$course || $course->type !== CourseTypeEnum::Free) {
+            return response()->json([
+                'status' => false,
+                'message' => 'This course is not free or does not exist.',
+            ], 403);
+        }
+
+        $subscribed = $user->subscribeToCourse($course->id);
+
+        return response()->json([
+            'status' => true,
+            'message' => $subscribed ? 'Subscribed successfully.' : 'Already subscribed.',
+        ]);
+    }
 
     public function getAllFreeCourses()
     {
-        $freeCourses = Course::with('levels')->where('type', CourseTypeEnum::Free)->paginate(10);
+        $freeCourses = Course::with('levels')
+            ->where('type', CourseTypeEnum::Free)->paginate(10);
 
         return response()->json([
             'status' => true,
@@ -51,7 +73,9 @@ class CourseController extends Controller
     }
     public function getAllPaidCourses()
     {
-        $paidCourses = Course::with('levels')->where('type', CourseTypeEnum::Paid)->paginate(10);
+        $paidCourses = Course::with('levels')
+            ->where('type', CourseTypeEnum::Paid)->get();
+
         return response()->json([
             'status' => true,
             'message' => 'Paid Courses List',

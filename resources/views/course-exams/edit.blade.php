@@ -70,9 +70,12 @@
                                                 </select>
                                             </div>
 
-                                            <div class="mb-4 question-text-input" data-index="{{ $qIndex }}" style="{{ $currentType === 'text' ? '' : 'display:none;' }}">
+                                            <div class="mb-4 question-text-input" data-index="{{ $qIndex }}">
                                                 <label class="form-label required">Question Text</label>
                                                 <input type="text" name="questions[{{ $qIndex }}][question_text]" class="form-control" value="{{ old("questions.$qIndex.question_text", $question->question_text) }}">
+                                                @error("questions.$qIndex.question_text")
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
 
                                             <div class="mb-4 question-file-upload" data-index="{{ $qIndex }}" style="{{ $currentType === 'text' ? 'display:none;' : '' }}">
@@ -103,14 +106,19 @@
                                                 <div class="input-group input-group-solid mb-3">
                                                     <input type="text" name="questions[{{ $qIndex }}][answers][]" class="form-control"
                                                            placeholder="Answer {{ $aIndex + 1 }}"
-                                                           value="{{ old("questions.$qIndex.answers.$aIndex", $answer->answer_text) }}" required>
+                                                           value="{{ old("questions.$qIndex.answers.$aIndex", $answer->answer_text) }}">
 
                                                     <div class="input-group-text">
                                                         <input type="radio" name="questions[{{ $qIndex }}][correct_answer]" value="{{ $aIndex }}"
                                                                {{ $answer->is_correct ? 'checked' : '' }} required>
                                                         <span class="ms-2">Correct</span>
                                                     </div>
+
                                                 </div>
+                                                @error("questions.$qIndex.answers.$aIndex")
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+
                                             @endforeach
 
                                         </div>
@@ -211,18 +219,15 @@
             const fileInput = fileUploadDiv.find('input[type="file"]');
 
             if (selectedType === 'text') {
-                textInputDiv.show();
                 fileUploadDiv.hide();
-
-                textInput.prop('required', true);
                 fileInput.prop('required', false).val('');
+                textInput.prop('required', true);
             } else {
-                textInputDiv.hide();
                 fileUploadDiv.show();
-
-                textInput.prop('required', false);
                 fileInput.prop('required', true);
+                textInput.prop('required', false);
             }
+
         });
     </script>
 @endpush

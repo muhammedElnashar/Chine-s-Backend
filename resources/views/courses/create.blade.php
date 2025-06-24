@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="mb-7">
                                     <label class="form-label required">Type</label>
-                                    <select name="type" aria-label="Select Type" data-control="select2" data-placeholder="Select course type" class="form-select form-select-solid">
+                                    <select name="type" aria-label="Select Type" id="type" data-control="select2" data-placeholder="Select course type" class="form-select form-select-solid">
                                         <option value="">Select Type</option>
                                         @foreach(\App\Enum\CourseTypeEnum::cases() as $type)
                                             <option value="{{ $type->value }}" {{ old('type') == $type->value ? 'selected' : '' }}>
@@ -38,9 +38,9 @@
                                     </select>
                                     @error('type')<small class="text-danger">{{ $message }}</small>@enderror
                                 </div>
-                                <div class="mb-7">
-                                    <label class="form-label required">Price</label>
-                                    <input type="number" name="price" value="{{ old('price' , 0) }}" class="form-control form-control-solid mb-2" placeholder="Enter Course Price" />
+                                <div class="mb-7" id="price">
+                                    <label class="form-label  required">Price</label>
+                                    <input type="number" id="add_price" name="price" value="{{ old('price' , 0) }}" class="form-control form-control-solid mb-2" placeholder="Enter Course Price" />
                                     @error('price')<small class="text-danger">{{ $message }}</small>@enderror
                                 </div>
 
@@ -64,6 +64,27 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
 @endsection
+@push('script')
+    <script>
+        $(document).ready(function() {
+            function togglePriceField() {
+                let selectedValue = $('#type').val();
+                if (selectedValue === 'paid') {
+                    $('#price').show();
+                } else {
+                    $('#price').hide();
+                    $('#add_price').val(0);
+                }
+            }
+
+            togglePriceField();
+
+            $('#type').on('change', function() {
+                togglePriceField();
+            });
+        });
+    </script>
+@endpush
+

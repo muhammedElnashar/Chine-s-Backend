@@ -78,7 +78,7 @@
                                                 </select>
                                             </div>
 
-                                            <div class="mb-4 question-text-input" data-index="{{ $qIndex }}" style="{{ $currentType === 'text' ? '' : 'display:none;' }}">
+                                            <div class="mb-4 question-text-input" data-index="{{ $qIndex }}">
                                                 <label class="form-label required">Question Text</label>
                                                 <input type="text" name="questions[{{ $qIndex }}][question_text]" class="form-control" value="{{ old("questions.$qIndex.question_text", $question->question_text) }}">
                                             </div>
@@ -219,17 +219,13 @@
             const fileInput = fileUploadDiv.find('input[type="file"]');
 
             if (selectedType === 'text') {
-                textInputDiv.show();
                 fileUploadDiv.hide();
-
-                textInput.prop('required', true);
                 fileInput.prop('required', false).val('');
+                textInput.prop('required', true);
             } else {
-                textInputDiv.hide();
                 fileUploadDiv.show();
-
-                textInput.prop('required', false);
                 fileInput.prop('required', true);
+                textInput.prop('required', false);
             }
         });
     </script>

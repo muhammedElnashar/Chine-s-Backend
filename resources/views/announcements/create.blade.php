@@ -71,7 +71,22 @@
                                                autocomplete="off"/>
                                     </div>
                                 </div>
+                                <div class="fv-row mb-7">
+                                    <label class="fs-6 fw-semibold form-label mb-2 ">
+                                        <span class="required">Url</span>
+                                        <span>
+                                            @error('url')<small class="text-danger">{{ $message }}</small>@enderror
+                                        </span>
+                                    </label>
 
+                                    <div class="input-group input-group-solid mb-5">
+                                        <input type="text" value="{{old("url")}}" class="form-control"
+                                               name="url"
+                                               placeholder="Enter Url" autocomplete="off"/>
+
+                                    </div>
+
+                                </div>
 
                                 <div class="text-center pt-15">
 

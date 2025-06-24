@@ -50,6 +50,8 @@ class CourseExamController extends Controller
     public function store(StoreLevelExamRequest $request, Course $course)
     {
         $data = $request->validated();
+        $now = now();
+
         DB::beginTransaction();
         try {
             $exam = Exam::create([
@@ -58,33 +60,44 @@ class CourseExamController extends Controller
                 'title' => $data['title'],
                 'description' => $data['description'],
             ]);
+
             foreach ($data['questions'] as $question) {
+                // رفع الوسائط إن وجدت
                 $mediaUrl = null;
                 if ($question['question_type'] !== 'text' && isset($question['question_media'])) {
                     $mediaUrl = $question['question_media']->storePublicly('questions_media', 's3');
                 }
+
+                // إدخال السؤال واسترجاع ID
                 $questionId = ExamQuestion::insertGetId([
                     'exam_id' => $exam->id,
                     'question_type' => $question['question_type'],
-                    'question_text' => $question['question_type'] === 'text' ? $question['question_text'] : null,
+                    'question_text' => $question['question_text'], // دائمًا يظهر الآن
                     'question_media_url' => $mediaUrl,
                     'explanation' => $question['explanation'] ?? null,
-                    'created_at' => now(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]);
+
+                $answers = [];
                 foreach ($question['answers'] as $index => $answer) {
-                    ExamAnswer::insert([
+                    $answers[] = [
                         'question_id' => $questionId,
                         'answer_text' => $answer,
                         'is_correct' => ($index == $question['correct_answer']),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
                 }
-            }
-            DB::commit();
-            return redirect()->route('courses.exams.index',$course)->with('success', 'Exam created successfully.');
 
-        }catch (\Throwable $e) {
+                ExamAnswer::insert($answers);
+            }
+
+            DB::commit();
+            return redirect()->route('courses.exams.index', $course)
+                ->with('success', 'Exam created successfully.');
+
+        } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Error creating exam: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while creating the exam.');
@@ -118,7 +131,6 @@ class CourseExamController extends Controller
     public function update(UpdateLevelExamRequest $request, Course $course, Exam $exam)
     {
         $data = $request->validated();
-
         DB::beginTransaction();
 
         try {
@@ -131,7 +143,6 @@ class CourseExamController extends Controller
             $existingQuestionIds = $existingQuestions->pluck('id')->toArray();
             $submittedQuestionIds = collect($data['questions'])->pluck('id')->filter()->toArray();
 
-            // حذف الأسئلة التي لم تعد موجودة
             $questionsToDelete = array_diff($existingQuestionIds, $submittedQuestionIds);
 
             foreach ($existingQuestions as $existingQuestion) {
@@ -148,7 +159,7 @@ class CourseExamController extends Controller
             foreach ($data['questions'] as $qIndex => $questionData) {
                 $type = $questionData['question_type'] ?? 'text';
                 $mediaPath = null;
-                $questionText = $type === 'text' ? $questionData['question_text'] : null;
+                $questionText = $questionData['question_text'];
 
                 if (!empty($questionData['id'])) {
                     // تعديل سؤال موجود
@@ -182,7 +193,6 @@ class CourseExamController extends Controller
                         'question_media_url' => $mediaPath ?: $existingQuestion->question_media_url,
                     ]);
 
-                    // حذف وإعادة حفظ الإجابات
                     $existingQuestion->answers()->delete();
 
                     foreach ($questionData['answers'] as $aIndex => $answer) {
@@ -194,7 +204,6 @@ class CourseExamController extends Controller
                     }
 
                 } else {
-                    // إنشاء سؤال جديد
                     if ($type !== 'text' && isset($questionData['question_media']) && is_object($questionData['question_media'])) {
                         $mediaPath = $questionData['question_media']->storePublicly('questions_media', 's3');
                     }

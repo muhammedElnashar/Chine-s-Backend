@@ -92,21 +92,20 @@
                                                         class="text-danger">{{ $message }}</small> @enderror
                                                 </div>
 
-                                                <div class="mb-4 question-text-input"
-                                                     style="{{ (old('questions.'.$qIndex.'.question_type') == 'text' || !old('questions')) ? '' : 'display:none;' }}">
+                                                <div class="mb-4 question-text-input">
                                                     <label class="form-label required">Question Text</label>
                                                     <input type="text" name="questions[{{ $qIndex }}][question_text]"
                                                            class="form-control"
-                                                           value="{{ old('questions.'.$qIndex.'.question_text') }}" {{ (old('questions.'.$qIndex.'.question_type') == 'text' || !old('questions')) ? 'required' : '' }}>
+                                                           value="{{ old('questions.'.$qIndex.'.question_text') }}" required>
                                                     @error('questions.'.$qIndex.'.question_text') <small
                                                         class="text-danger">{{ $message }}</small> @enderror
                                                 </div>
 
 
-                                                <div class="mb-4 question-file-input"
+                                                <div class="mb-4 question-file-upload"
                                                      style="{{ (old('questions.'.$qIndex.'.question_type') != 'text') ? '' : 'display:none;' }}">
                                                     <label class="form-label required">Upload File</label>
-                                                    <input type="file" name="questions[{{ $qIndex }}][question_media]"
+                                                    <input type="file" name="questions[{{ $qIndex }}][question_media]" class="form-control"
                                                            accept="image/*,video/*,audio/*" {{ (old('questions.'.$qIndex.'.question_type') != 'text') ? 'required' : '' }}>
                                                 </div>
 
@@ -165,10 +164,10 @@
                                                            class="form-control" required>
                                                 </div>
 
-                                                <div class="mb-4 question-file-input" style="display:none;">
+                                                <div class="mb-4 question-file-upload" style="display:none;">
                                                     <label class="form-label required">Upload File</label>
                                                     <input type="file" name="questions[{{ $i }}][question_media]"
-                                                           accept="image/*,video/*,audio/*">
+                                                           accept="image/*,video/*,audio/*" class="form-control">
                                                 </div>
 
                                                 <label class="form-label">Answers</label>
@@ -248,9 +247,9 @@
                 <input type="text" name="questions[${questionIndex}][question_text]" class="form-control" required>
             </div>
 
-            <div class="mb-4 question-file-input" style="display:none;">
+            <div class="mb-4 question-file-upload" style="display:none;">
                 <label class="form-label required">Upload File</label>
-                <input type="file" name="questions[${questionIndex}][question_media]" accept="image/*,video/*,audio/*">
+                <input type="file" name="questions[${questionIndex}][question_media]" accept="image/*,video/*,audio/*" class="form-control">
             </div>
 
             <label class="form-label">Answers</label>
@@ -283,7 +282,6 @@
             $('.question-block').each(function (index) {
                 $(this).find('.question-number').text(index + 1);
 
-                // Show delete button only for questions index >= 10 (zero based)
                 if (index < 2) {
                     $(this).find('.remove-question-btn').hide();
                 } else {
@@ -297,12 +295,12 @@
             const $block = $(this).closest('.question-block');
             const val = $(this).val();
 
+            $block.find('.question-text-input').show().find('input').attr('required', true);
+
             if (val === 'text') {
-                $block.find('.question-text-input').show().find('input').attr('required', true);
-                $block.find('.question-file-input').hide().find('input').attr('required', false).val('');
+                $block.find('.question-file-upload').hide().find('input').attr('required', false).val('');
             } else {
-                $block.find('.question-text-input').hide().find('input').attr('required', false).val('');
-                $block.find('.question-file-input').show().find('input').attr('required', true);
+                $block.find('.question-file-upload').show().find('input').attr('required', true);
             }
         });
 

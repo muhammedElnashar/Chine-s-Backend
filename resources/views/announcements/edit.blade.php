@@ -71,18 +71,36 @@
                                                autocomplete="off"/>
                                     </div>
                                     <div class="input-group  mb-5">
-                                        <img src="{{ Storage::disk('s3')->url($announcement->image) }} " width="50px" height="50px">
+                                        @if($announcement->image)
+                                        <img src="{{ Storage::disk('s3')->url($announcement->image) }} " alt="" width="50px" height="50px">
+                                        @endif
                                     </div>
 
 
-                                    <div class="text-center pt-15">
+                                </div>
+                                <div class="fv-row mb-7">
+                                    <label class="fs-6 fw-semibold form-label mb-2 ">
+                                        <span class="required">Url</span>
+                                        <span>
+                                            @error('url')<small class="text-danger">{{ $message }}</small>@enderror
+                                        </span>
+                                    </label>
 
-                                        <button type="submit" class="btn btn-primary" data-kt-modal-action="submit">
-                                            <span class="indicator-label">Save</span>
-                                            <span class="indicator-progress">جاري الحفظ ...
+                                    <div class="input-group input-group-solid mb-5">
+                                        <input type="text" value="{{$announcement->url}}" class="form-control"
+                                               name="url"
+                                               placeholder="Enter Url" autocomplete="off"/>
+
+                                    </div>
+
+                                </div>
+                                <div class="text-center pt-15">
+
+                                    <button type="submit" class="btn btn-primary" data-kt-modal-action="submit">
+                                        <span class="indicator-label">Save</span>
+                                        <span class="indicator-progress">جاري الحفظ ...
                                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                        </button>
-                                    </div>
+                                    </button>
                                 </div>
 
                             </form>

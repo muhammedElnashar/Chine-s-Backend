@@ -26,8 +26,9 @@
                         <thead>
                         <tr class=" text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                             <th class="min-w-150px">Title</th>
-                            <th class="min-w-250px">Content</th>
+                            <th class="min-w-200px">Content</th>
                             <th class="min-w-100px">Image</th>
+                            <th class="min-w-150px">Url</th>
 
                             <th class="min-w-100px text-center" colspan="1">Actions</th>
                         </tr>
@@ -40,7 +41,11 @@
                             <tr>
                                 <td>{{ $announcement->title }}</td>
                                 <td>{{ \Illuminate\Support\Str::words($announcement->content, 5, '...') }}</td>
-                                <td> <img src="{{ Storage::disk('s3')->url($announcement->image) }} " width="50px" height="50px"></td>
+                                <td> @if($announcement->image)
+                                        <img src="{{ Storage::disk('s3')->url($announcement->image) }} " alt="" width="50px" height="50px">
+                                    @endif
+                                </td>
+                                <td>{{ $announcement->url }}</td>
                                 <td>
                                     <div class="d-flex justify-content-center flex-shrink-0">
                                         <a href="{{route('announcements.edit',$announcement)}}"

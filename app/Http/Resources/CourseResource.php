@@ -25,6 +25,7 @@ class CourseResource extends JsonResource
             'image' => $this->image ? Storage::disk('s3')->url($this->image) : null,
             'type' => $this->type,
             'price' => $isFree ? null : $this->price,
+            'subscribers_count' => $this->users_count ?? 0,
             'section' => LevelResource::collection($this->whenLoaded('levels')),
             'course_exam' => new LevelExamResource($this->exam) ,
 
