@@ -25,6 +25,7 @@ class QuestionResource extends JsonResource
                     ? Storage::disk('s3')->url($this->question_media_url)
                     : null,
             ]),
+            'explanation' => $this->explanation,
             'answers' => AnswerResource::collection($this->answers),
         ];
     }
