@@ -28,7 +28,7 @@ class LevelResource extends JsonResource
             'totalDuration' => $this->videos->sum('duration'),
             'videoCount' => $this->videos->count(),
             'VideoHasWatched'=> $watchedCount,
-
+            'videos' => VideoResource::collection($this->whenLoaded('videos')),
         ];
     }
 
