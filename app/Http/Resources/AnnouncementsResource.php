@@ -20,6 +20,7 @@ class AnnouncementsResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'image' => $this->image ? Storage::disk('s3')->url($this->image) : null,
+            'url' => $this->url,
 
         ];    }
 }
