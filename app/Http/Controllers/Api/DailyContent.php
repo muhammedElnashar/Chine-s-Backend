@@ -4,21 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Enum\DailyExerciseTypeEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreQuizRequest;
-use App\Http\Requests\SubmissionExamRequest;
+
 use App\Http\Requests\SubmissionQuizRequest;
 use App\Http\Resources\DailyQuestionResource;
 use App\Http\Resources\DailyQuizResource;
 use App\Http\Resources\DailyWordResource;
 use App\Http\Resources\ExamAttemptResource;
-use App\Http\Resources\ExamResource;
 use App\Models\DailyExercise;
 use App\Models\DailyExerciseAttempt;
 use App\Models\DailyExerciseAttemptAnswer;
 use App\Models\DailyExerciseQuestionAnswer;
-use App\Models\ExamAnswer;
-use App\Models\ExamAttempt;
-use App\Models\ExamAttemptAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,34 +22,79 @@ class DailyContent extends Controller
     public function getDailyTextExercise(Request $request)
     {
         $request->validate([
-            'date' => 'nullable|date_format:Y-m-d',
+            'current_id' => 'nullable|integer',
+            'direction' => 'nullable|in:next,prev',
         ]);
 
-        $date = $request->input('date') ?? now()->toDateString();
-        $dailyQuestions = DailyExercise::whereDate('date', $date)
-            ->where('type', DailyExerciseTypeEnum::Quiz)
-            ->get();
+        $currentId = $request->input('current_id');
+        $direction = $request->input('direction', 'next');
+
+        $query = DailyExercise::where('type', DailyExerciseTypeEnum::Quiz);
+
+        if ($currentId) {
+            if ($direction === 'next') {
+                $query->where('id', '>', $currentId)->orderBy('id', 'asc');
+            } else {
+                $query->where('id', '<', $currentId)->orderBy('id', 'desc');
+            }
+        } else {
+            $query->orderBy('id', 'asc');
+        }
+
+        $exercise = $query->first();
+
+        if (!$exercise) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No ' . $direction . ' exercise available.',
+                'data' => null,
+            ], 404);
+        }
+
         return response()->json([
             'status' => true,
-            'message' => 'Daily Text Exercise for ' . $date,
-            'data' => DailyQuizResource::collection($dailyQuestions)
-        ],200);
+            'message' => ucfirst($direction) . ' exercise loaded.',
+            'data' => new DailyQuizResource($exercise),
+        ]);
     }
     public function getDailyAudioExercise(Request $request)
     {
         $request->validate([
-            'date' => 'nullable|date_format:Y-m-d',
+            'current_id' => 'nullable|integer',
+            'direction' => 'nullable|in:next,prev',
         ]);
-        $date = $request->input('date') ?? now()->toDateString();
 
-        $dailyWord= DailyExercise::whereDate('date', $date)
-            ->where('type',DailyExerciseTypeEnum::Audio)
-            ->with('audioWords')->get();
+        $currentId = $request->input('current_id');
+        $direction = $request->input('direction', 'next');
+
+        $query = DailyExercise::where('type', DailyExerciseTypeEnum::Audio)
+            ->with('audioWords');
+
+        if ($currentId) {
+            if ($direction === 'next') {
+                $query->where('id', '>', $currentId)->orderBy('id', 'asc');
+            } else {
+                $query->where('id', '<', $currentId)->orderBy('id', 'desc');
+            }
+        } else {
+            $query->orderBy('id', 'asc');
+        }
+
+        $exercise = $query->first();
+
+        if (!$exercise) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No ' . $direction . ' audio exercise available.',
+                'data' => null,
+            ], 404);
+        }
+
         return response()->json([
             'status' => true,
-            'message' => 'Daily Audio Word  for ' . $date,
-            'data' => DailyWordResource::collection($dailyWord)
-        ],200);
+            'message' => ucfirst($direction) . ' audio exercise loaded.',
+            'data' => new DailyWordResource($exercise),
+        ]);
     }
 
     public function ShowDailyExercise ($id)
